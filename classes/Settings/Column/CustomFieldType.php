@@ -26,6 +26,7 @@ class CustomFieldType extends Settings\Column
 
 			case 'date' :
 				$settings[] = new Date( $this->column );
+				$settings[] = new DateSaveFormat( $this->column );
 
 				break;
 			case 'image' :
@@ -194,15 +195,68 @@ class CustomFieldType extends Settings\Column
 		return ac_helper()->string->string_to_array_integers( $string );
 	}
 
+	private function get_date_save_format_setting() {
+		$setting = $this->column->get_setting( 'date_save_format' );
+
+		return ( $setting instanceof DateSaveFormat ) ? $setting : false;
+	}
+
+	/**
+	 * @param $value
+	 *
+	 * @return false|string
+	 */
+	private function get_timestamp( $value ) {
+		if ( ! $value ) {
+			return false;
+		}
+
+		$setting = $this->get_date_save_format_setting();
+
+		if ( $setting instanceof DateSaveFormat ) {
+			return $this->get_timestamp_from_setting( $value, $setting );
+		}
+
+		return $this->get_fallback_timestamp( $value );
+	}
+
+	private function get_fallback_timestamp( $value ) {
+		$timestamp = ac_helper()->date->strtotime( $value );
+		if ( $timestamp ) {
+			$value = date( 'c', $timestamp );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param                $value
+	 * @param DateSaveFormat $setting
+	 *
+	 * @return false|string
+	 */
+	private function get_timestamp_from_setting( $value, $setting ) {
+		$format = $setting->get_date_save_format();
+
+		if ( ! $format ) {
+			return $this->get_fallback_timestamp( $value );
+		}
+
+		$date = \DateTime::createFromFormat( $format, $value );
+
+		if ( ! $date ) {
+			return false;
+		}
+
+		return $date->format( 'U' );
+	}
+
 	public function format( $value, $original_value ) {
 
 		switch ( $this->get_field_type() ) {
 
 			case 'date' :
-				$timestamp = ac_helper()->date->strtotime( $value );
-				if ( $timestamp ) {
-					$value = date( 'c', $timestamp );
-				}
+				$value = $this->get_timestamp( $value );
 
 				break;
 
