@@ -216,7 +216,10 @@ You can find a list of the available actions and filters (and examples on how to
 = NEWVERSION =
 Release Date: tbd
 
+* [Fixed] Javascript errors on admin pages for specific columns
+* [Fixed] Removed flikering for Pro modal
 * [Fixed] Styling issue on the WordPress Customize page
+* [Fixed] Re-init tooltips when column is reloaded or added
 
 = 3.4.4 =
 Release Date: May 20th, 2019

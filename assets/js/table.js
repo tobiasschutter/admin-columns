@@ -180,6 +180,7 @@ function () {
     key: "open",
     value: function open() {
       this.onOpen();
+      this.el.removeAttribute('style');
       this.el.classList.add('-active');
     }
   }, {
@@ -1115,6 +1116,8 @@ exports.default = void 0;
 
 __webpack_require__(/*! core-js/modules/es6.regexp.split */ "./node_modules/core-js/modules/es6.regexp.split.js");
 
+__webpack_require__(/*! core-js/modules/es6.regexp.replace */ "./node_modules/core-js/modules/es6.regexp.replace.js");
+
 __webpack_require__(/*! core-js/modules/web.dom.iterable */ "./node_modules/core-js/modules/web.dom.iterable.js");
 
 var _actions = _interopRequireDefault(__webpack_require__(/*! ./actions */ "./js/table/actions.js"));
@@ -1224,7 +1227,8 @@ function () {
       var id = this._getIDFromRow(row);
 
       this.Columns.getColumnNames().forEach(function (name) {
-        var td = row.querySelector(".column-".concat(name));
+        var selector = name.replace(/\./g, '\\.');
+        var td = row.querySelector(".column-" + selector);
 
         if (td) {
           var cell = new _cell.default(id, name, td);
@@ -1254,7 +1258,7 @@ function () {
     key: "_getIDFromRow",
     value: function _getIDFromRow(row) {
       var id = row.id;
-      var id_parts = id.split('-');
+      var id_parts = id.split(/[_,\-]+/);
       var item_id = id_parts[id_parts.length - 1];
 
       if (row.classList.contains('no-items')) {
@@ -1284,7 +1288,13 @@ function () {
         }
       }
 
-      return item_id;
+      row.dataset.id = item_id;
+      document.dispatchEvent(new CustomEvent('AC_Table_Row_Id', {
+        detail: {
+          row: row
+        }
+      }));
+      return row.dataset.id;
     }
   }, {
     key: "getRowCellByName",

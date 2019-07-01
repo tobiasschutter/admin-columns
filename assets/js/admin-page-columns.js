@@ -96,6 +96,8 @@
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
+__webpack_require__(/*! core-js/modules/es6.array.find */ "./node_modules/core-js/modules/es6.array.find.js");
+
 var _form = _interopRequireDefault(__webpack_require__(/*! ./admin/columns/form */ "./js/admin/columns/form.js"));
 
 var _modals = _interopRequireDefault(__webpack_require__(/*! ./modules/modals */ "./js/modules/modals.js"));
@@ -171,6 +173,18 @@ jQuery(document).ready(function () {
 
   new _menu.default().init();
   new _feedback.default('.sidebox#direct-feedback');
+  jQuery(document).on('AC_Column_Change', function (e, column) {
+    column.$el.find('.ac-pointer').each(function () {
+      ac_pointer(jQuery(this));
+    });
+  });
+  jQuery(document).on('AC_Column_Created', function (e, column) {
+    setTimeout(function () {
+      column.$el.find('.ac-pointer').each(function () {
+        ac_pointer(jQuery(this));
+      });
+    }, 100);
+  });
 });
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
@@ -432,7 +446,7 @@ function () {
     value: function create() {
       this.initNewInstance();
       this.bindEvents();
-      jQuery(document).trigger('AC_Column_Created', [self]);
+      jQuery(document).trigger('AC_Column_Created', [this]);
       return this;
     }
     /**
@@ -956,7 +970,7 @@ function () {
     key: "initColumns",
     value: function initColumns() {
       var self = this;
-      self.columns = [];
+      self.columns = {};
       this.$form.find('.ac-column').each(function () {
         var $el = jQuery(this);
         var column = new _column.default($el);
@@ -969,7 +983,7 @@ function () {
     key: "reindexColumns",
     value: function reindexColumns() {
       var self = this;
-      self.columns = [];
+      self.columns = {};
       this.$form.find('.ac-column').each(function () {
         var column = jQuery(this).data('column');
         self.columns[column.name] = column;
@@ -1828,6 +1842,7 @@ function () {
     key: "open",
     value: function open() {
       this.onOpen();
+      this.el.removeAttribute('style');
       this.el.classList.add('-active');
     }
   }, {
