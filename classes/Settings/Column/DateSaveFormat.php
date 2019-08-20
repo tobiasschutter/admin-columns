@@ -19,12 +19,26 @@ class DateSaveFormat extends Settings\Column {
 	 * @return View
 	 */
 	public function create_view() {
-		$field = $this->create_element( 'text', 'date_save_format' )->set_attribute( 'placeholder', __( 'Date save format', 'codepress-admin-columns' ) );
+		$field = $this->create_element( 'select', 'date_save_format' )
+		              ->set_options( array(
+			              ''            => 'Default',
+			              'Y-m-d'       => 'Y-m-d',
+			              'Y-m-d H:i:s' => 'Y-m-d H:i:s',
+			              'd-m-Y'       => 'd-m-Y',
+			              'd/m/Y'       => 'd/m/Y',
+			              'm-d-Y'       => 'm-d-Y',
+			              'm/d/Y'       => 'm/d/Y',
+			              'Ymd'         => 'Ymd',
+			              'U'           => 'Timestamp',
+		              ) );
 
 		$view = new View( array(
-			'label'   => __( 'Date Save Format', 'codepress-admin-columns' ),
-			'setting' => $field,
+			'label'    => __( 'Date Save Format', 'codepress-admin-columns' ),
+			'tooltip'  => __( 'Choose the date format that is used in the database for this field.', 'codepress-admin-columns' ),
+			'setting'  => $field,
 		) );
+
+		$view->set_template( 'settings/setting-date-save-format' );
 
 		return $view;
 	}

@@ -631,6 +631,22 @@
 	}
 }
 
+.ac-column-setting--date_save_format {
+	.ac-setting-input {
+		.row {
+			display: flex;
+		}
+		.col {
+			flex: 0 0 auto;
+			&.-input{
+				flex: 0 0 200px;
+				margin-right: 15px;
+			}
+		}
+
+	}
+}
+
 .ac-column-setting--pro {
 
 	.col-label {

@@ -223,6 +223,7 @@ class CustomFieldType extends Settings\Column
 
 	private function get_fallback_timestamp( $value ) {
 		$timestamp = ac_helper()->date->strtotime( $value );
+
 		if ( $timestamp ) {
 			$value = date( 'c', $timestamp );
 		}

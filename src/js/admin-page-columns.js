@@ -28,6 +28,7 @@ import EventAddons from './admin/columns/events/addons';
 import SettingImageSize from './admin/columns/settings/image-size';
 import SettingSubSettingToggle from './admin/columns/settings/sub-setting-toggle';
 import SettingDate from './admin/columns/settings/date';
+import SettingDateSaveFormat from './admin/columns/settings/date-save-format';
 import SettingPro from './admin/columns/settings/pro';
 import SettingWidth from './admin/columns/settings/width';
 import SettingLabel from './admin/columns/settings/label';
@@ -56,6 +57,7 @@ jQuery( document ).on( 'AC_Form_Loaded', function() {
 
 		/** Register Settings **/
 		.registerSetting( 'date', SettingDate )
+		.registerSetting( 'date_save_format', SettingDateSaveFormat )
 		.registerSetting( 'image_size', SettingImageSize )
 		.registerSetting( 'pro', SettingPro )
 		.registerSetting( 'sub_setting_toggle', SettingSubSettingToggle )

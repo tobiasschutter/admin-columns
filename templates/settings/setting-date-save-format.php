@@ -29,23 +29,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<td class="col-input">
 			<?php if ( $this->setting ) : ?>
 				<div class="ac-setting-input">
-					<?php echo $this->setting; ?>
+					<div class="row">
+						<div class="col -input"><?php echo $this->setting; ?></div>
+						<div class="col -date">Example: <span data-date-example></spandata-date-example></div>
+					</div>
+					<p class="help-msg">
+						When the 'default' option is selected, the display date will be attempted to format the current value to the provided date format.
+					</p>
 
-					<?php if ( $this->help_msg ): ?>
-						<p class="help-msg"><?php echo $this->help_msg; ?></p>
-					<?php endif; ?>
 				</div>
 			<?php endif; ?>
-
-			<?php
-
-			if ( is_array( $this->sections ) ) {
-				foreach ( $this->sections as $section ) {
-					echo $section;
-				}
-			}
-
-			?>
 		</td>
 	</tr>
 </table>

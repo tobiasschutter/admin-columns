@@ -132,6 +132,8 @@ var _subSettingToggle = _interopRequireDefault(__webpack_require__(/*! ./admin/c
 
 var _date = _interopRequireDefault(__webpack_require__(/*! ./admin/columns/settings/date */ "./js/admin/columns/settings/date.js"));
 
+var _dateSaveFormat = _interopRequireDefault(__webpack_require__(/*! ./admin/columns/settings/date-save-format */ "./js/admin/columns/settings/date-save-format.js"));
+
 var _pro = _interopRequireDefault(__webpack_require__(/*! ./admin/columns/settings/pro */ "./js/admin/columns/settings/pro.js"));
 
 var _width = _interopRequireDefault(__webpack_require__(/*! ./admin/columns/settings/width */ "./js/admin/columns/settings/width.js"));
@@ -166,7 +168,7 @@ jQuery(document).on('AC_Form_Loaded', function () {
   /** Register Events **/
   AdminColumns.Column.registerEvent('toggle', _toggle.default).registerEvent('remove', _remove.default).registerEvent('clone', _clone.default).registerEvent('refresh', _refresh.default).registerEvent('type_selector', _typeSelector.default).registerEvent('indicator', _indicator.default).registerEvent('label', _label.default.label).registerEvent('label_setting', _label.default.setting).registerEvent('addons', _addons.default)
   /** Register Settings **/
-  .registerSetting('date', _date.default).registerSetting('image_size', _imageSize.default).registerSetting('pro', _pro.default).registerSetting('sub_setting_toggle', _subSettingToggle.default).registerSetting('width', _width.default).registerSetting('customfield', _customField.default).registerSetting('label', _label2.default);
+  .registerSetting('date', _date.default).registerSetting('date_save_format', _dateSaveFormat.default).registerSetting('image_size', _imageSize.default).registerSetting('pro', _pro.default).registerSetting('sub_setting_toggle', _subSettingToggle.default).registerSetting('width', _width.default).registerSetting('customfield', _customField.default).registerSetting('label', _label2.default);
 });
 jQuery(document).ready(function () {
   AC.Form = new _form.default('#cpac .ac-columns form');
@@ -1369,6 +1371,109 @@ var customfield = function customfield(column) {
 var _default = customfield;
 exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./js/admin/columns/settings/date-save-format.js":
+/*!*******************************************************!*\
+  !*** ./js/admin/columns/settings/date-save-format.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var SettingDateSaveFormat =
+/*#__PURE__*/
+function () {
+  function SettingDateSaveFormat(column) {
+    _classCallCheck(this, SettingDateSaveFormat);
+
+    this.column = column;
+    this.column = column;
+    this.setting = column.$el[0].querySelector('.ac-column-setting--date_save_format');
+
+    if (!this.setting) {
+      return;
+    }
+
+    this.initHelp();
+    this.bindEvents();
+  }
+
+  _createClass(SettingDateSaveFormat, [{
+    key: "getValue",
+    value: function getValue() {
+      return this.setting.querySelector('select').value;
+    }
+  }, {
+    key: "initHelp",
+    value: function initHelp() {
+      if ('' === this.getValue()) {
+        this.setting.querySelector('.help-msg').style.visible = 'visible';
+      } else {
+        this.setting.querySelector('.help-msg').style.visible = 'hidden';
+      }
+    }
+  }, {
+    key: "initExample",
+    value: function initExample() {
+      if ('' === this.getValue()) {
+        this.setting.querySelector('.col.-date').style.display = 'block';
+      } else {
+        this.setting.querySelector('.col.-date').style.display = 'none';
+      }
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      var _this = this;
+
+      var select = this.setting.querySelector('select');
+      select.addEventListener('change', function (e) {
+        _this.getDateExample(select.value).done(function (d) {
+          _this.setting.querySelectorAll('[data-date-example]').forEach(function (e) {
+            e.innerText = d;
+          });
+        });
+
+        _this.initHelp();
+      });
+    }
+  }, {
+    key: "createExample",
+    value: function createExample() {
+      this.setting.querySelector('.ac-setting-input').insertAdjacentHTML('beforeend', '<div class="test"">AAP</div>');
+    }
+  }, {
+    key: "getDateExample",
+    value: function getDateExample(format) {
+      return jQuery.ajax({
+        url: ajaxurl,
+        method: 'post',
+        data: {
+          action: 'date_format',
+          date: format
+        }
+      });
+    }
+  }]);
+
+  return SettingDateSaveFormat;
+}();
+
+var date_save_format = function date_save_format(column) {
+  column.settings.date_save_format = new SettingDateSaveFormat(column);
+};
+
+module.exports = date_save_format;
 
 /***/ }),
 
