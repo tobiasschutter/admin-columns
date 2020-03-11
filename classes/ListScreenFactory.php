@@ -3,11 +3,12 @@
 namespace AC;
 
 use AC\ListScreen\Post;
+use AC\Type\ListScreenId;
 use AC\Type\ListScreenType;
 
 class ListScreenFactory {
 
-	public function create( ListScreenType $type, $id = null, $columns = [], $settings = [], $subtype = null ) {
+	public function create( ListScreenType $type, ListScreenId $id = null, array $columns = [], array $settings = [], $subtype = null ) {
 
 		switch ( $type ) {
 

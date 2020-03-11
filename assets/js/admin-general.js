@@ -128,6 +128,8 @@ global.ac_pointers = function ($) {
   }, function () {
     $(this).removeClass('hover');
     $('.ac-pointer').trigger('close');
+  }).on('click', '.close', function () {
+    $('.ac-pointer').removeClass('open');
   });
   new _tooltips.default();
 };
@@ -196,22 +198,30 @@ global.ac_pointer = function ($el) {
         el.addClass('open');
       }
     });
-  } // show on hover
+  }
 
-
-  el.hover(function () {
-    $(this).pointer('open');
-  }, function () {
-    var el = $(this);
+  el.click(function () {
+    el.pointer('open');
+  });
+  el.mouseenter(function () {
+    el.pointer('open');
     setTimeout(function () {
-      if (!el.hasClass('open') && $('.ac-wp-pointer.hover').length === 0) {
+      el.pointer('open');
+    }, 2);
+  });
+  el.mouseleave(function () {
+    setTimeout(function () {
+      if (!el.hasClass('open') && jQuery('.ac-wp-pointer.hover').length === 0) {
         el.pointer('close');
       }
-    }, 100);
-  }).on('close', function () {
-    if (!el.hasClass('open') && $('.ac-wp-pointer.hover').length === 0) {
-      el.pointer('close');
-    }
+    }, 1);
+  });
+  el.on('close', function () {
+    setTimeout(function () {
+      if (!el.hasClass('open')) {
+        el.pointer('close');
+      }
+    });
   });
 };
 /*

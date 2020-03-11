@@ -2,12 +2,14 @@
 
 namespace AC\ListScreenRepository;
 
+use AC\Exception\MissingListScreenIdException;
 use AC\ListScreen;
 use AC\ListScreenCollection;
 use AC\ListScreenFactory;
 use AC\ListScreenRepositoryWritable;
 use AC\ListScreenTypes;
 use AC\Type\ListScreenId;
+use AC\Type\ListScreenType;
 use DateTime;
 use LogicException;
 
@@ -128,13 +130,17 @@ final class Database implements ListScreenRepositoryWritable {
 	public function save( ListScreen $list_screen ) {
 		global $wpdb;
 
+		if ( ! $list_screen->has_id() ) {
+			throw MissingListScreenIdException::from_saving_list_screen();
+		}
+
 		$args = [
 			'list_id'       => $list_screen->get_id()->get_id(),
-			'list_key'      => $list_screen->get_key(),
-			'title'         => $list_screen->get_title(),
-			'columns'       => serialize( $list_screen->get_settings() ),
-			'settings'      => serialize( $list_screen->get_preferences() ),
-			'date_modified' => $list_screen->get_updated()->format( 'Y-m-d H:i:s' ),
+			'list_key'      => $list_screen->get_type()->get_value(),
+			'title'         => $list_screen->get_label(),
+			'columns'       => serialize( $list_screen->get_columns() ),
+			'settings'      => serialize( $list_screen->get_settings() ),
+			'date_modified' => ( new DateTime() )->format( 'Y-m-d H:i:s' ),
 		];
 
 		$table = $wpdb->prefix . self::TABLE;
@@ -200,25 +206,13 @@ final class Database implements ListScreenRepositoryWritable {
 	private function create_list_screen( $data ) {
 		$factory = new ListScreenFactory();
 
-		$factory->create(  )
-
-		$list_screen = $this->list_screen_types->get_list_screen_by_key( $data->list_key );
-
-		if ( $list_screen ) {
-			$list_screen->set_title( $data->title )
-			            ->set_layout_id( $data->list_id )
-			            ->set_updated( DateTime::createFromFormat( 'Y-m-d H:i:s', $data->date_modified ) );
-
-			if ( $data->settings ) {
-				$list_screen->set_preferences( unserialize( $data->settings ) );
-			}
-
-			if ( $data->columns ) {
-				$list_screen->set_settings( unserialize( $data->columns ) );
-			}
-		}
-
-		return $list_screen;
+		return $factory->create(
+			new ListScreenType( 'post' ),
+			new ListScreenId( $data->id ),
+			unserialize( $data->columns ),
+			unserialize( $data->settings ),
+			$data->list_key
+		);
 	}
 
 }

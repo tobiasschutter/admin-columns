@@ -161,9 +161,9 @@ class AdminColumns extends Plugin {
 //			$list_screens[] = new ListScreen\User();
 //		}
 
-		foreach ( $list_screens as $list_screen ) {
-			ListScreenTypes::instance()->register_list_screen( $list_screen );
-		}
+//		foreach ( $list_screens as $list_screen ) {
+//			ListScreenTypes::instance()->register_list_screen( $list_screen );
+//		}
 
 		do_action( 'ac/list_screens', $this );
 	}
@@ -353,9 +353,9 @@ class AdminColumns extends Plugin {
 	 * @deprecated 4.1
 	 */
 	public function is_doing_ajax() {
-		_deprecated_function( __METHOD__, '4.1' );
+		_deprecated_function( __METHOD__, '4.1', 'wp_doing_ajax()' );
 
-		return defined( 'DOING_AJAX' ) && DOING_AJAX;
+		return wp_doing_ajax();
 	}
 
 }

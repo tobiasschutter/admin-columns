@@ -29,7 +29,9 @@ global.ac_pointers = function( $ ) {
 	}, function() {
 		$( this ).removeClass( 'hover' );
 		$( '.ac-pointer' ).trigger( 'close' );
-	} );
+	} ).on('click', '.close', function(){
+		$( '.ac-pointer' ).removeClass('open');
+	});
 
 	new Tooltip();
 };
@@ -42,7 +44,6 @@ global.ac_pointer = function( $el ) {
 		pos_edge = el.attr( 'data-pos_edge' ),
 		w = el.attr( 'data-width' ),
 		noclick = el.attr( 'data-noclick' );
-
 
 	let position = {
 		at : 'left top',		// position of wp-pointer relative to the element which triggers the pointer event
@@ -76,7 +77,7 @@ global.ac_pointer = function( $el ) {
 		};
 	}
 
-	if( pos_edge  ){
+	if ( pos_edge ) {
 		position.edge = pos_edge;
 	}
 
@@ -101,22 +102,33 @@ global.ac_pointer = function( $el ) {
 		} );
 	}
 
-	// show on hover
-	el.hover( function() {
-		$( this ).pointer( 'open' );
-	}, function() {
-		let el = $( this );
-		setTimeout( function() {
-			if ( !el.hasClass( 'open' ) && $( '.ac-wp-pointer.hover' ).length === 0 ) {
+	el.click( function() {
+		el.pointer( 'open' );
+	} );
+
+	el.mouseenter( function() {
+		el.pointer( 'open' );
+		setTimeout( () => {
+			el.pointer( 'open' );
+		}, 2 );
+	} );
+
+	el.mouseleave( function() {
+		setTimeout( () => {
+			if ( !el.hasClass( 'open' ) && jQuery( '.ac-wp-pointer.hover' ).length === 0 ) {
 				el.pointer( 'close' );
 			}
-		}, 100 );
-
-	} ).on( 'close', function() {
-		if ( !el.hasClass( 'open' ) && $( '.ac-wp-pointer.hover' ).length === 0 ) {
-			el.pointer( 'close' );
-		}
+		}, 1 );
 	} );
+
+	el.on( 'close', () => {
+		setTimeout( () => {
+			if( !el.hasClass( 'open' ) ){
+				el.pointer( 'close' );
+			}
+		} )
+	} );
+
 };
 
 /*

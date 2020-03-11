@@ -2,7 +2,6 @@
 
 namespace AC\Column\Post;
 
-use AC;
 use AC\Column;
 
 class Author extends Column {
