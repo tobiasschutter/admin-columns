@@ -8,11 +8,13 @@ use AC\Asset\Script;
 use AC\Asset\Style;
 use AC\Controller;
 use AC\Deprecated;
+use AC\ListScreen\Post;
 use AC\ListScreenRepository\Database;
 use AC\ListScreenRepository\Storage;
 use AC\Screen\QuickEdit;
 use AC\Table;
 use AC\ThirdParty;
+use AC\Type\ListScreenType;
 
 class AdminColumns extends Plugin {
 
@@ -146,16 +148,18 @@ class AdminColumns extends Plugin {
 	public function register_list_screens() {
 		$list_screens = [];
 
+		$factory = new ListScreenFactory();
+
 		foreach ( $this->get_post_types() as $post_type ) {
-			$list_screens[] = new ListScreen\Post( $post_type );
+			$list_screens[] = $factory->create( new ListScreenType( Post::TYPE ), null, [], [], $post_type );
 		}
 
-		$list_screens[] = new ListScreen\Media();
-		$list_screens[] = new ListScreen\Comment();
-
-		if ( ! is_multisite() ) {
-			$list_screens[] = new ListScreen\User();
-		}
+//		$list_screens[] = new ListScreen\Media();
+//		$list_screens[] = new ListScreen\Comment();
+//
+//		if ( ! is_multisite() ) {
+//			$list_screens[] = new ListScreen\User();
+//		}
 
 		foreach ( $list_screens as $list_screen ) {
 			ListScreenTypes::instance()->register_list_screen( $list_screen );

@@ -7,7 +7,7 @@ use ReflectionException;
 use WP_User;
 use WP_Users_List_Table;
 
-class User extends AC\ListScreenWP {
+class _User extends AC\ListScreenWP {
 
 	public function __construct() {
 

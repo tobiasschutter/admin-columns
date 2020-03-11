@@ -6,7 +6,7 @@ use AC;
 use ReflectionException;
 use WP_Media_List_Table;
 
-class Media extends AC\ListScreenPost {
+class _Media extends AC\ListScreenPost {
 
 	public function __construct() {
 		parent::__construct( 'attachment' );

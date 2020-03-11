@@ -27,7 +27,7 @@ class ListScreenTypes {
 	 * @return $this
 	 */
 	public function register_list_screen( ListScreen $list_screen ) {
-		$this->list_screens[ $list_screen->get_key() ] = $list_screen;
+		$this->list_screens[] = $list_screen;
 
 		return $this;
 	}
@@ -35,12 +35,13 @@ class ListScreenTypes {
 	public function get_list_screens( array $args = [] ) {
 		$list_screens = $this->list_screens;
 
-		if ( isset( $args['network_only'] ) && true === $args['network_only'] ) {
-			$list_screens = $this->filter_by_network( $list_screens );
-		}
-		if ( isset( $args['site_only'] ) && true === $args['site_only'] ) {
-			$list_screens = $this->filter_by_non_network( $list_screens );
-		}
+		// todo
+//		if ( isset( $args['network_only'] ) && true === $args['network_only'] ) {
+//			$list_screens = $this->filter_by_network( $list_screens );
+//		}
+//		if ( isset( $args['site_only'] ) && true === $args['site_only'] ) {
+//			$list_screens = $this->filter_by_non_network( $list_screens );
+//		}
 
 		return $list_screens;
 	}
@@ -81,7 +82,8 @@ class ListScreenTypes {
 	 *
 	 * @return ListScreen|null
 	 */
-	public function get_list_screen_by_key( $key, $network_only = null ) {
+	// todo: remove
+	public function _get_list_screen_by_key( $key, $network_only = null ) {
 		if ( true === $network_only ) {
 			$list_screens = $this->filter_by_network( $this->get_list_screens() );
 		} else if ( false === $network_only ) {

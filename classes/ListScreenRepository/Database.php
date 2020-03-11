@@ -4,6 +4,7 @@ namespace AC\ListScreenRepository;
 
 use AC\ListScreen;
 use AC\ListScreenCollection;
+use AC\ListScreenFactory;
 use AC\ListScreenRepositoryWritable;
 use AC\ListScreenTypes;
 use AC\Type\ListScreenId;
@@ -127,12 +128,8 @@ final class Database implements ListScreenRepositoryWritable {
 	public function save( ListScreen $list_screen ) {
 		global $wpdb;
 
-		if ( ! $list_screen->has_id() ) {
-			throw new LogicException( 'Cannot save a ListScreen without an identity.' );
-		}
-
 		$args = [
-			'list_id'       => $list_screen->get_layout_id(),
+			'list_id'       => $list_screen->get_id()->get_id(),
 			'list_key'      => $list_screen->get_key(),
 			'title'         => $list_screen->get_title(),
 			'columns'       => serialize( $list_screen->get_settings() ),
@@ -201,6 +198,10 @@ final class Database implements ListScreenRepositoryWritable {
 	 * @return ListScreen
 	 */
 	private function create_list_screen( $data ) {
+		$factory = new ListScreenFactory();
+
+		$factory->create(  )
+
 		$list_screen = $this->list_screen_types->get_list_screen_by_key( $data->list_key );
 
 		if ( $list_screen ) {

@@ -10,7 +10,7 @@ use WP_Comments_List_Table;
 /**
  * @since 2.0
  */
-class Comment extends AC\ListScreenWP {
+class _Comment extends AC\ListScreenWP {
 
 	public function __construct() {
 

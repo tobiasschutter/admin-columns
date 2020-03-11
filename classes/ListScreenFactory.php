@@ -2,16 +2,19 @@
 
 namespace AC;
 
-/**
- * @deprecated 4.0
- */
+use AC\ListScreen\Post;
+use AC\Type\ListScreenType;
+
 class ListScreenFactory {
 
-	public static function create( $key, $id = null ) {
-		$list_screen = ListScreenTypes::instance()->get_list_screen_by_key( $key );
+	public function create( ListScreenType $type, $id = null, $columns = [], $settings = [], $subtype = null ) {
 
-		if ( $list_screen ) {
-			return clone $list_screen;
+		switch ( $type ) {
+
+			case Post::TYPE :
+				$post_type = get_post_type_object( $subtype );
+
+				return new Post( $subtype, $post_type->labels->singular_label, $id, $columns, $settings );
 		}
 
 		return null;
