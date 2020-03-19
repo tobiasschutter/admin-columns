@@ -61,8 +61,9 @@ class Columns extends Script {
 
 		$params = [
 			'_ajax_nonce'                => wp_create_nonce( AC\Ajax\Handler::NONCE_ACTION ),
-			'list_screen'                => $this->list_screen->get_key(),
-			'layout'                     => $this->list_screen->get_layout_id(),
+			'layout'                     => $this->list_screen->get_id(),
+			// todo: remove?
+			'list_screen'                => $this->list_screen->get_type(),
 			'original_columns'           => [],
 			'uninitialized_list_screens' => [],
 			'i18n'                       => [
@@ -76,12 +77,13 @@ class Columns extends Script {
 		];
 
 		foreach ( $this->get_list_screens() as $list_screen ) {
-			if ( $this->default_columns->exists( $list_screen->get_key() ) ) {
+			if ( $this->default_columns->exists( $list_screen ) ) {
 				continue;
 			}
 
-			$params['uninitialized_list_screens'][ $list_screen->get_key() ] = [
-				'screen_link' => add_query_arg( [ 'save-default-headings' => '1', 'list_screen' => $list_screen->get_key() ], $list_screen->get_screen_link() ),
+			$params['uninitialized_list_screens'][] = [
+				// todo
+				'screen_link' => add_query_arg( [ 'save-default-headings' => '1', 'list_screen' => $list_screen->get_id()->get_value() ], $list_screen->get_screen_link() ),
 				'label'       => $list_screen->get_label(),
 			];
 		}

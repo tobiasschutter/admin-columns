@@ -124,4 +124,9 @@ abstract class ListScreen {
 		return $this->columns->get( $id->get_value() );
 	}
 
+	// todo: maybe remove?
+	public function is_read_only() {
+		return false;
+	}
+
 }

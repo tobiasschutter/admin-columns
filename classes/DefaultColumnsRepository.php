@@ -30,8 +30,8 @@ class DefaultColumnsRepository {
 	 *
 	 * @return bool
 	 */
-	public function exists( $list_screen_key ) {
-		return false !== get_option( $this->get_option_name( $list_screen_key ) );
+	public function exists( ListScreen $list_screen ) {
+		return false !== get_option( $this->get_option_name( $list_screen->get_type()->get_value() ) );
 	}
 
 	/**

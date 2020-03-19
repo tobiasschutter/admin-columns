@@ -105,7 +105,8 @@ class Columns extends Page implements Enqueueables, Helpable {
 	public function render() {
 		$list_screen = $this->controller->get_list_screen();
 
-		if ( ! $this->default_columns->exists( $list_screen->get_key() ) ) {
+		// todo
+		if ( ! $this->default_columns->exists( $list_screen ) ) {
 			$modal = new View( [
 				'message' => 'Loading columns',
 			] );
@@ -119,7 +120,7 @@ class Columns extends Page implements Enqueueables, Helpable {
 		ob_start();
 		?>
 
-		<div class="ac-admin<?= $list_screen->get_settings() ? ' stored' : ''; ?>" data-type="<?= esc_attr( $list_screen->get_key() ); ?>">
+		<div class="ac-admin<?= $list_screen->get_settings() ? ' stored' : ''; ?>" data-type="<?= esc_attr( $list_screen->get_id()->get_value() ); ?>">
 			<div class="main">
 
 				<?= $this->menu->render(); ?>
@@ -130,7 +131,7 @@ class Columns extends Page implements Enqueueables, Helpable {
 
 			<div class="ac-right">
 				<div class="ac-right-inner">
-					<?php if ( ! $list_screen->is_read_only() ) : ?>
+					<?php if ( true || ! $list_screen->is_read_only() ) : ?>
 
 						<?php
 
@@ -143,14 +144,13 @@ class Columns extends Page implements Enqueueables, Helpable {
 						$delete_confirmation_message = false;
 
 						if ( apply_filters( 'ac/delete_confirmation', true ) ) {
-							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_title() . "'" );
+							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_label() . "'" );
 						}
 
 						$actions = new View( [
 							'label_main'                  => $label_main,
 							'label_second'                => $label_second,
-							'list_screen_key'             => $list_screen->get_key(),
-							'list_screen_id'              => $list_screen->get_layout_id(),
+							'list_screen_id'              => $list_screen->get_id()->get_value(),
 							'delete_confirmation_message' => $delete_confirmation_message,
 						] );
 
@@ -182,9 +182,8 @@ class Columns extends Page implements Enqueueables, Helpable {
 
 					$columns = new View( [
 						'class'          => $list_screen->is_read_only() ? ' disabled' : '',
-						'list_screen'    => $list_screen->get_key(),
-						'list_screen_id' => $list_screen->get_layout_id(),
-						'title'          => $list_screen->get_title(),
+						'list_screen_id' => $list_screen->get_id()->get_value(),
+						'title'          => $list_screen->get_label(),
 						'columns'        => $list_screen->get_columns(),
 						'show_actions'   => ! $list_screen->is_read_only(),
 						'show_clear_all' => apply_filters( 'ac/enable_clear_columns_button', false ),
@@ -192,7 +191,7 @@ class Columns extends Page implements Enqueueables, Helpable {
 
 					do_action( 'ac/settings/before_columns', $list_screen );
 
-					echo $columns->set_template( 'admin/edit-columns' );
+					echo $columns->set_template( 'admin/edit-columns' )->render();
 
 					do_action( 'ac/settings/after_columns', $list_screen );
 
@@ -203,7 +202,7 @@ class Columns extends Page implements Enqueueables, Helpable {
 			<div class="clear"></div>
 
 			<div id="add-new-column-template">
-				<?= $this->render_column_template( $list_screen ); ?>
+				<?php // todo $this->render_column_template( $list_screen ); ?>
 			</div>
 
 		</div>

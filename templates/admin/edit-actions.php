@@ -25,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<form class="form-reset" method="post">
-		<input type="hidden" name="list_screen" value="<?php echo esc_attr( $this->list_screen_key ); ?>"/>
 		<input type="hidden" name="layout" value="<?php echo esc_attr( $this->list_screen_id ); ?>"/>
 		<input type="hidden" name="action" value="restore_by_type"/>
 

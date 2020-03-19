@@ -33,7 +33,7 @@ final class ListScreenId {
 		return new self( uniqid() );
 	}
 
-	public function get_id() {
+	public function get_value() {
 		return $this->id;
 	}
 
@@ -43,7 +43,7 @@ final class ListScreenId {
 	 * @return bool
 	 */
 	public function equals( ListScreenId $id ) {
-		return $this->id === $id->get_id();
+		return $this->id === $id->get_value();
 	}
 
 }

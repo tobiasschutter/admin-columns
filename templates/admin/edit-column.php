@@ -12,8 +12,8 @@ $column = $this->column;
 
 ?>
 
-	<div class="ac-column ac-<?php echo esc_attr( $column->get_type() ); ?>"
-			data-type="<?php echo esc_attr( $column->get_type() ); ?>"
+	<div class="ac-column ac-<?php echo esc_attr( $column->get_name() ); ?>"
+			data-type="<?php echo esc_attr( $column->get_name() ); ?>"
 			data-original="<?php echo esc_attr( $column->is_original() ); ?>"
 			data-column-name="<?php echo esc_attr( $column->get_name() ); ?>">
 
@@ -74,7 +74,7 @@ $column = $this->column;
 				<?php
 
 				foreach ( $column->get_settings() as $setting ) {
-					echo $setting->render() . "\n";
+					echo $setting->render( $column->get_id() ) . "\n";
 				}
 
 				?>

@@ -88,7 +88,7 @@ final class Database implements ListScreenRepositoryWritable {
 			LIMIT 1;
 		';
 
-		$data = $wpdb->get_row( $wpdb->prepare( $sql, $id->get_id() ) );
+		$data = $wpdb->get_row( $wpdb->prepare( $sql, $id->get_value() ) );
 
 		if ( ! isset( $data->list_id ) ) {
 			return null;
@@ -134,7 +134,7 @@ final class Database implements ListScreenRepositoryWritable {
 		}
 
 		$args = [
-			'list_id'       => $list_screen->get_id()->get_id(),
+			'list_id'       => $list_screen->get_id()->get_value(),
 			'list_key'      => $list_screen->get_type()->get_value(),
 			'title'         => $list_screen->get_label(),
 			'columns'       => serialize( $list_screen->get_columns() ),
@@ -189,7 +189,7 @@ final class Database implements ListScreenRepositoryWritable {
 		$wpdb->delete(
 			$wpdb->prefix . self::TABLE,
 			[
-				'list_id' => $list_screen->get_id()->get_id(),
+				'list_id' => $list_screen->get_id()->get_value(),
 			],
 			[
 				'%s',

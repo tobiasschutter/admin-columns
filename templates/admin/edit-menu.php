@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class="menu <?php echo $this->class; ?>">
+<div class="menu <?= $this->class; ?>">
 	<form>
 		<input type="hidden" name="page" value="<?php echo esc_attr( \AC\Admin::NAME ); ?>">
 

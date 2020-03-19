@@ -72,39 +72,6 @@ class ListScreenRequest {
 	 */
 	public function get_list_screen() {
 
-		// todo test
-		$factory = new Post();
-		$column = $factory->create( 'column-images', ColumnId::generate(), [
-			'width'           => '202',
-			'width_unit'      => 'px',
-			'label'           => 'Images Test',
-			'number_of_items' => 2,
-			'image_size'      => 'cpac-custom',
-			'image_size_w'    => 34,
-			'image_size_h'    => 50,
-		] );
-
-		/** @var Images $images */
-		$images = $column->get_setting( 'images' );
-		$value = $images->format( [ 3152, 3153, 3155, 3156 ], '' );
-
-		echo '<pre>'; print_r( $value ); echo '</pre>'; exit;
-
-
-		echo '<pre>'; print_r( $column ); echo '</pre>'; exit;
-		
-		$id = new ListScreenId( '5e738d0e36e2d' );
-
-		$list_screen = $this->storage->find( $id );
-
-		$column = $list_screen->get_column( new ColumnId( '5e738d28500c2' ) );
-
-		echo '<pre>a';
-		print_r( $column );
-		echo '</pre>';
-		exit;
-
-		return;
 		// Requested list ID
 		$list_id = ListScreenId::is_valid_id( filter_input( INPUT_GET, 'layout_id' ) )
 			? new ListScreenId( filter_input( INPUT_GET, 'layout_id' ) )
@@ -146,11 +113,7 @@ class ListScreenRequest {
 			: null;
 
 		if ( $list_id && $this->storage->exists( $list_id ) ) {
-			$list_screen = $this->storage->find( $list_id );
-
-			if ( $list_screen && $this->exists_list_screen( $list_screen->get_key() ) ) {
-				return $list_screen;
-			}
+			return $this->storage->find( $list_id );
 		}
 
 		// Last visited Key

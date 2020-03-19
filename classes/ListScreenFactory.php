@@ -15,7 +15,11 @@ class ListScreenFactory {
 		switch ( $type->get_value() ) {
 
 			case Post::TYPE :
-				$post_type = get_post_type_object( $args['subtype'] );
+				if ( ! isset( $args['post_type'] ) ) {
+					throw new RuntimeException( 'Missing post type argument.' );
+				}
+
+				$post_type = get_post_type_object( $args['post_type'] );
 
 				if ( ! $post_type ) {
 					throw new RuntimeException( 'Invalid post type.' );
@@ -33,7 +37,7 @@ class ListScreenFactory {
 					? $args['settings']
 					: [];
 
-				return new Post( $args['subtype'], $post_type->labels->singular_name, $columns, $settings, $id );
+				return new Post( $args['post_type'], $post_type->labels->singular_name, $columns, $settings, $id );
 		}
 
 		return null;
@@ -42,7 +46,7 @@ class ListScreenFactory {
 	public function create_by_key( $key, array $args = [] ) {
 		$type = Post::TYPE;
 
-		$args['subtype'] = $key;
+		$args['post_type'] = $key;
 
 		// todo: ms-users, taxonomy etc.
 

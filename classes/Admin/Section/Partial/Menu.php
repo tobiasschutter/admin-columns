@@ -25,8 +25,9 @@ class Menu {
 
 		$menu = new View( [
 			'items'       => $this->get_grouped_list_screens(),
-			'current'     => $list_screen->get_key(),
-			'screen_link' => $list_screen->get_screen_link(),
+			'current'     => $list_screen->get_id()->get_value(),
+			// todo
+			'screen_link' => $list_screen->get_url( $this->is_network ),
 			'class'       => $is_hidden ? 'hidden' : '',
 		] );
 
@@ -54,7 +55,9 @@ class Menu {
 
 		$list_screens_grouped = [];
 		foreach ( $list_screens as $list_screen ) {
-			$list_screens_grouped[ $list_screen->get_group() ][ $list_screen->get_key() ] = $list_screen->get_label();
+			// todo
+//			$list_screens_grouped[ $list_screen->get_group() ][ $list_screen->get_key() ] = $list_screen->get_label();
+			$list_screens_grouped[ 'group' ][ $list_screen->get_id()->get_value() ] = $list_screen->get_label();
 		}
 
 		$grouped = [];

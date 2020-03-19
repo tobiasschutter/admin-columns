@@ -31,9 +31,8 @@ class Column {
 		$this->label = $label;
 		$this->id = $id;
 
-		$this->add_setting( new Settings\Column\Image( $settings ) )
-		     ->add_setting( new Settings\Column\Width( $settings ) )
-		     ->add_setting( new Settings\Column\Label( $label, $settings ) );
+		$this->add_setting( new Settings\Column\Label( $label, $settings ) )
+		     ->add_setting( new Settings\Column\Width( $settings ) );
 	}
 
 	/**
@@ -49,6 +48,14 @@ class Column {
 	public function get_id() {
 		return $this->id;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function get_label() {
+		return $this->label;
+	}
+
 
 	/**
 	 * @return Settings\Column[]
@@ -75,6 +82,11 @@ class Column {
 	 */
 	public function get_setting( $name ) {
 		return $this->settings[ $name ];
+	}
+
+	// todo: remove?
+	public function is_original() {
+		return true;
 	}
 
 }
