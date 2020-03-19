@@ -3,6 +3,7 @@
 namespace AC\Settings\Column;
 
 use AC\Settings;
+use AC\Type\ColumnId;
 use AC\View;
 
 class Width extends Settings\Column
@@ -36,11 +37,11 @@ class Width extends Settings\Column
 		return array_key_exists( $width_unit, $this->get_valid_width_units() );
 	}
 
-	public function create_view() {
-		$width = $this->create_element( 'text' )
+	public function create_view( ColumnId $id ) {
+		$width = $this->create_element( $id, 'text' )
 		              ->set_attribute( 'placeholder', __( 'Auto', 'codepress-admin-columns' ) );
 
-		$unit = $this->create_element( 'radio', 'width_unit' )
+		$unit = $this->create_element( $id, 'radio', 'width_unit' )
 		             ->set_options( $this->get_valid_width_units() );
 
 		$section = new View( [

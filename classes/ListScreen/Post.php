@@ -2,6 +2,7 @@
 
 namespace AC\ListScreen;
 
+use AC\ColumnCollection;
 use AC\ListScreen;
 use AC\MetaType;
 use AC\Type\ListScreenId;
@@ -17,8 +18,8 @@ class Post extends ListScreen {
 	 */
 	private $post_type;
 
-	public function __construct( $post_type, $label, ListScreenId $id = null, array $columns = [], array $settings = [] ) {
-		parent::__construct( new ListScreenType( self::TYPE ), new MetaType( 'post' ), $label, $id, $columns, $settings );
+	public function __construct( $post_type, $label, ColumnCollection $columns = null, array $settings = [], ListScreenId $id = null ) {
+		parent::__construct( new ListScreenType( self::TYPE ), new MetaType( 'post' ), $label, $columns, $settings, $id );
 
 		$this->post_type = $post_type;
 	}

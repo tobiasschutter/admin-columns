@@ -3,11 +3,14 @@
 namespace AC\Column\Post;
 
 use AC\Column;
+use AC\Type\ColumnId;
 
 class FeaturedImage extends Column implements Column\Renderable {
 
-	public function __construct( array $data = [] ) {
-		parent::__construct( 'column-featured_image', $data );
+	const NAME = 'column-featured_image';
+
+	public function __construct( ColumnId $id, array $settings = [] ) {
+		parent::__construct( self::NAME, $id, $settings );
 	}
 
 	public function render( $id ) {

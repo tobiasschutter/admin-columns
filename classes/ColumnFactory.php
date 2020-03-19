@@ -3,20 +3,26 @@
 namespace AC;
 
 use AC\Column\Post;
-use RuntimeException;
+use AC\Type\ColumnId;
 
 class ColumnFactory {
 
-	public function create( $name, array $settings = [] ) {
+	public function create( $name, ColumnId $id, array $settings = [] ) {
 
 		switch ( $name ) {
-			case 'author' :
-				return new Post\Author( $settings );
+			case Post\Author::NAME :
+				// todo: inject name
+				return new Post\Author( 'Author', $id, $settings );
+
+			case Post\AuthorName::NAME :
+				return new Post\AuthorName( $id, $settings );
 
 			case 'column-permalink' :
-				return new Post\Permalink( $settings );
+				return new Post\Permalink( $id, $settings );
 		}
 
-		return new RuntimeException( 'Invalid column.' );
+		// todo: add hook for registering columns
+
+		return null;
 	}
 }

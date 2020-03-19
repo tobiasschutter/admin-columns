@@ -9,7 +9,6 @@ use AC\ListScreenFactory;
 use AC\ListScreenRepositoryWritable;
 use AC\ListScreenTypes;
 use AC\Type\ListScreenId;
-use AC\Type\ListScreenType;
 use DateTime;
 use LogicException;
 
@@ -205,17 +204,15 @@ final class Database implements ListScreenRepositoryWritable {
 	 */
 	private function create_list_screen( $data ) {
 		$factory = new ListScreenFactory();
-echo '<pre>'; print_r( $data ); echo '</pre>'; exit;
-//		return $factory->create_by_key(
-//			
-//			[
-//				'id' => 
-//			]
-//			new ListScreenId( $data->id ),
-//			unserialize( $data->columns ),
-//			unserialize( $data->settings ),
-//			$data->list_key
-//		);
+
+		$settings = unserialize( $data->settings );
+		$settings['title'] = $data->title;
+
+		return $factory->create_by_key( $data->list_key, [
+			'id'       => $data->list_id,
+			'columns'  => unserialize( $data->columns ),
+			'settings' => $settings,
+		] );
 	}
 
 }

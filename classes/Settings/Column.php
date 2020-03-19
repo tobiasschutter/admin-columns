@@ -4,6 +4,7 @@ namespace AC\Settings;
 
 use AC;
 use AC\Form\Element;
+use AC\Type\ColumnId;
 use AC\View;
 
 abstract class Column {
@@ -21,24 +22,17 @@ abstract class Column {
 	protected $options = [];
 
 	/**
-	 * @var AC\Column
-	 */
-	protected $column;
-
-	/**
 	 * Options that are set by the user and should not be overwritten with defaults
 	 * @var array
 	 */
 	private $user_set = [];
 
-	/**
-	 * @param AC\Column $column
-	 */
-	public function __construct( AC\Column $column ) {
-		$this->column = $column;
+	public function __construct( array $values = [] ) {
 
+		// todo: create protected values property
 		$this->set_options();
 		$this->set_name();
+		$this->set_values( $values );
 	}
 
 	/**
@@ -49,9 +43,12 @@ abstract class Column {
 
 	/**
 	 * Create a string representation of this setting
+	 *
+	 * @param ColumnId $column_name
+	 *
 	 * @return View|false
 	 */
-	public abstract function create_view();
+	public abstract function create_view( ColumnId $id );
 
 	/**
 	 * Get settings that depend on this setting
@@ -256,7 +253,7 @@ abstract class Column {
 	 *
 	 * @return Element\Select|Element\Input|Element\Radio
 	 */
-	protected function create_element( $type, $name = null ) {
+	protected function create_element( $column_name, $type, $name = null ) {
 		if ( null === $name ) {
 			$name = $this->get_default_option();
 		}
@@ -280,8 +277,8 @@ abstract class Column {
 				$element->set_type( $type );
 		}
 
-		$element->set_name( sprintf( 'columns[%s][%s]', $this->column->get_name(), $name ) );
-		$element->set_id( sprintf( 'ac-%s-%s', $this->column->get_name(), $name ) );
+		$element->set_name( sprintf( 'columns[%s][%s]', $column_name, $name ) );
+		$element->set_id( sprintf( 'ac-%s-%s', $column_name, $name ) );
 		$element->add_class( 'ac-setting-input_' . $name );
 
 		// try to set current value
@@ -323,10 +320,13 @@ abstract class Column {
 
 	/**
 	 * Render the output of self::create_view()
+	 *
+	 * @param ColumnId $id
+	 *
 	 * @return false|string
 	 */
-	public function render() {
-		$view = $this->create_view();
+	public function render( ColumnId $id ) {
+		$view = $this->create_view( $id );
 
 		if ( ! ( $view instanceof View ) ) {
 			return false;
@@ -363,15 +363,16 @@ abstract class Column {
 		return $view->render();
 	}
 
-	public function __toString() {
-		$rendered = $this->render();
-
-		if ( ! is_string( $rendered ) ) {
-			return '';
-		}
-
-		return $rendered;
-	}
+	// todo: remove. use render.
+	//	public function __toString() {
+	//		$rendered = $this->render();
+	//
+	//		if ( ! is_string( $rendered ) ) {
+	//			return '';
+	//		}
+	//
+	//		return $rendered;
+	//	}
 
 	public function get_column() {
 		return $this->column;

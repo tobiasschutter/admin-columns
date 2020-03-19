@@ -3,6 +3,7 @@
 namespace AC\Settings\Column;
 
 use AC\Settings;
+use AC\Type\ColumnId;
 use AC\View;
 
 class Label extends Settings\Column {
@@ -12,18 +13,24 @@ class Label extends Settings\Column {
 	 */
 	private $label;
 
+	public function __construct( $label, array $values = [] ) {
+		$this->label = $label;
+
+		parent::__construct( $values );
+	}
+
 	protected function define_options() {
 		return [
-			'label'      => $this->column->get_label(),
+			'label'      => $this->label,
 			'label_type' => 'text',
 		];
 	}
 
-	public function create_view() {
+	public function create_view( ColumnId $id ) {
 
 		$setting = $this
-			->create_element( 'text' )
-			->set_attribute( 'placeholder', $this->column->get_label() );
+			->create_element( $id, 'text' )
+			->set_attribute( 'placeholder', $this->label );
 
 		$view = new View( [
 			'label'   => __( 'Label', 'codepress-admin-columns' ),

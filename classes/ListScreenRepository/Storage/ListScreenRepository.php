@@ -87,7 +87,8 @@ class ListScreenRepository implements AC\ListScreenRepositoryWritable, SourceAwa
 		$list_screen = $this->repository->find( $id );
 
 		if ( $list_screen && ! $this->is_writable() ) {
-			$list_screen->set_read_only( true );
+			// todo
+			//$list_screen->set_read_only( true );
 		}
 
 		return $list_screen;

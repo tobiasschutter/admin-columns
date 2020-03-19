@@ -2,6 +2,7 @@
 
 namespace AC;
 
+use AC\Type\ColumnId;
 use AC\Type\ListScreenId;
 use AC\Type\ListScreenType;
 use WP_Screen;
@@ -29,7 +30,7 @@ abstract class ListScreen {
 	private $label;
 
 	/**
-	 * @var Column[]
+	 * @var ColumnCollection
 	 */
 	private $columns;
 
@@ -38,13 +39,17 @@ abstract class ListScreen {
 	 */
 	private $settings;
 
-	public function __construct( ListScreenType $type, MetaType $meta_type, $label, ListScreenId $id = null, array $columns = [], array $settings = [] ) {
+	public function __construct( ListScreenType $type, MetaType $meta_type, $label, ColumnCollection $columns = null, array $settings = [], ListScreenId $id = null ) {
+		if ( null === $columns ) {
+			$columns = new ColumnCollection();
+		}
+
 		$this->type = $type;
 		$this->meta_type = $meta_type;
 		$this->label = $label;
-		$this->id = $id;
 		$this->columns = $columns;
 		$this->settings = $settings;
+		$this->id = $id;
 	}
 
 	/**
@@ -97,7 +102,7 @@ abstract class ListScreen {
 	}
 
 	/**
-	 * @return Column[]
+	 * @return ColumnCollection
 	 */
 	public function get_columns() {
 		return $this->columns;
@@ -108,6 +113,15 @@ abstract class ListScreen {
 	 */
 	public function get_settings() {
 		return $this->settings;
+	}
+
+	/**
+	 * @param ColumnId $id
+	 *
+	 * @return Column|null
+	 */
+	public function get_column( ColumnId $id ) {
+		return $this->columns->get( $id->get_value() );
 	}
 
 }
