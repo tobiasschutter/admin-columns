@@ -3,22 +3,37 @@
 namespace AC;
 
 use AC\ListScreen\Post;
-use AC\Type\ListScreenId;
 use AC\Type\ListScreenType;
+use RuntimeException;
 
 class ListScreenFactory {
 
-	public function create( ListScreenType $type, ListScreenId $id = null, array $columns = [], array $settings = [], $subtype = null ) {
+	public function create( ListScreenType $type, array $args = [] ) {
 
-		switch ( $type ) {
+		switch ( $type->get_value() ) {
 
 			case Post::TYPE :
-				$post_type = get_post_type_object( $subtype );
+				$post_type = get_post_type_object( $args['subtype'] );
 
-				return new Post( $subtype, $post_type->labels->singular_label, $id, $columns, $settings );
+				if ( ! $post_type ) {
+					throw new RuntimeException( 'Invalid post type.' );
+				}
+
+				return new Post( $args['subtype'], $post_type->labels->singular_name );
 		}
 
 		return null;
+	}
+
+	public function create_by_key( $key, array $args = [] ) {
+		$type = Post::TYPE;
+
+		$args['subtype'] = $key;
+
+		// todo: ms-users, taxonomy etc.
+
+		return $this->create( new ListScreenType( $type ), $args );
+
 	}
 
 }

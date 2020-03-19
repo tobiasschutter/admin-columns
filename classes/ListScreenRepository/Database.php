@@ -205,14 +205,17 @@ final class Database implements ListScreenRepositoryWritable {
 	 */
 	private function create_list_screen( $data ) {
 		$factory = new ListScreenFactory();
-
-		return $factory->create(
-			new ListScreenType( 'post' ),
-			new ListScreenId( $data->id ),
-			unserialize( $data->columns ),
-			unserialize( $data->settings ),
-			$data->list_key
-		);
+echo '<pre>'; print_r( $data ); echo '</pre>'; exit;
+//		return $factory->create_by_key(
+//			
+//			[
+//				'id' => 
+//			]
+//			new ListScreenId( $data->id ),
+//			unserialize( $data->columns ),
+//			unserialize( $data->settings ),
+//			$data->list_key
+//		);
 	}
 
 }

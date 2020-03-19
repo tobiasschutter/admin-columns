@@ -3,6 +3,7 @@
 namespace AC\Controller;
 
 use AC\ListScreen;
+use AC\ListScreenFactory;
 use AC\ListScreenRepository\Storage;
 use AC\ListScreenTypes;
 use AC\Preferences;
@@ -23,11 +24,19 @@ class ListScreenRequest {
 	/** @var bool */
 	private $is_network;
 
+	/**
+	 * @var ListScreenFactory
+	 */
+	private $list_screen_factory;
+
+
+
 	public function __construct( Request $request, Storage $storage, Preferences $preference, $is_network = false ) {
 		$this->request = $request;
 		$this->storage = $storage;
 		$this->preference = $preference;
 		$this->is_network = (bool) $is_network;
+		$this->list_screen_factory = new ListScreenFactory();
 	}
 
 	/**
@@ -36,7 +45,8 @@ class ListScreenRequest {
 	 * @return bool
 	 */
 	private function exists_list_screen( $list_key ) {
-		return null !== ListScreenTypes::instance()->get_list_screen_by_key( $list_key, $this->is_network );
+		return null !== $this->list_screen_factory->create_by_key( $list_key );
+//		return null !== ListScreenTypes::instance()->get_list_screen_by_key( $list_key, $this->is_network );
 	}
 
 	/**
@@ -58,6 +68,16 @@ class ListScreenRequest {
 	 * @return ListScreen
 	 */
 	public function get_list_screen() {
+		$id = new ListScreenId( '5e738d0e36e2d' );
+
+		$list_screen = $this->storage->find( $id );
+		
+		echo '<pre>'; print_r( $list_screen ); echo '</pre>'; exit;
+
+
+		$list_screen = $this->list_screen_factory->create_by_key( 'page' );
+
+		echo '<pre>'; print_r( $list_screen ); echo '</pre>'; exit;
 
 		// Requested list ID
 		$list_id = ListScreenId::is_valid_id( filter_input( INPUT_GET, 'layout_id' ) )

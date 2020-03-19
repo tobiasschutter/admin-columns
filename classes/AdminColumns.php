@@ -151,7 +151,7 @@ class AdminColumns extends Plugin {
 		$factory = new ListScreenFactory();
 
 		foreach ( $this->get_post_types() as $post_type ) {
-			$list_screens[] = $factory->create( new ListScreenType( Post::TYPE ), null, [], [], $post_type );
+			$list_screens[] = $factory->create( new ListScreenType( Post::TYPE ), [ 'subtype' => $post_type ] );
 		}
 
 //		$list_screens[] = new ListScreen\Media();

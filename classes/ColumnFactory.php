@@ -3,6 +3,7 @@
 namespace AC;
 
 use AC\Column\Post;
+use RuntimeException;
 
 class ColumnFactory {
 
@@ -16,5 +17,6 @@ class ColumnFactory {
 				return new Post\Permalink( $settings );
 		}
 
+		return new RuntimeException( 'Invalid column.' );
 	}
 }
