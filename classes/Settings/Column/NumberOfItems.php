@@ -3,6 +3,7 @@
 namespace AC\Settings\Column;
 
 use AC\Settings;
+use AC\Type\ColumnId;
 use AC\View;
 
 class NumberOfItems extends Settings\Column {
@@ -22,8 +23,8 @@ class NumberOfItems extends Settings\Column {
 		];
 	}
 
-	public function create_view() {
-		$item_limit = $this->create_element( 'number' )
+	public function create_view( ColumnId $id ) {
+		$item_limit = $this->create_element( $id, 'number' )
 		                   ->set_attribute( 'step', 1 );
 
 		$view = new View( [

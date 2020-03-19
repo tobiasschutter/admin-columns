@@ -22,7 +22,7 @@ class Column {
 	private $id;
 
 	/**
-	 * @var array
+	 * @var Settings\Column[]
 	 */
 	protected $settings;
 
@@ -31,9 +31,9 @@ class Column {
 		$this->label = $label;
 		$this->id = $id;
 
-		// todo
-		$this->settings[] = new Settings\Column\Width( $settings );
-		$this->settings[] = new Settings\Column\Label( $this->label, $settings );
+		$this->add_setting( new Settings\Column\Image( $settings ) )
+		     ->add_setting( new Settings\Column\Width( $settings ) )
+		     ->add_setting( new Settings\Column\Label( $label, $settings ) );
 	}
 
 	/**
@@ -55,6 +55,26 @@ class Column {
 	 */
 	public function get_settings() {
 		return $this->settings;
+	}
+
+	/**
+	 * @param Settings\Column $setting
+	 *
+	 * @return $this
+	 */
+	protected function add_setting( Settings\Column $setting ) {
+		$this->settings[ $setting->get_name() ] = $setting;
+
+		return $this;
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return Settings\Column
+	 */
+	public function get_setting( $name ) {
+		return $this->settings[ $name ];
 	}
 
 }

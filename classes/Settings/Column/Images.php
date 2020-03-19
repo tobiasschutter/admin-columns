@@ -7,17 +7,22 @@ use AC\Settings;
 
 class Images extends Settings\Column\Image {
 
+	public function __construct( array $values = [] ) {
+		parent::__construct( $values );
+
+		$this->set_dependent_setting( new Settings\Column\NumberOfItems( $values ) );
+	}
+
 	protected function set_name() {
 		return $this->name = 'images';
 	}
 
-	public function get_dependent_settings() {
-		return [ new Settings\Column\NumberOfItems( $this->column ) ];
-	}
-
 	public function format( $value, $original_value ) {
 		$collection = new Collection( (array) $value );
-		$removed = $collection->limit( $this->column->get_setting( 'number_of_items' )->get_value() );
+
+		/** @var NumberOfItems $setting */
+		$setting = $this->get_dependent_setting( 'number_of_items' );
+		$removed = $collection->limit( $setting->get_value() );
 
 		return ac_helper()->html->images( parent::format( $collection->all(), $original_value ), $removed );
 	}

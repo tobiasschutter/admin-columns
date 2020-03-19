@@ -27,6 +27,11 @@ abstract class Column {
 	 */
 	private $user_set = [];
 
+	/**
+	 * @var Column[]
+	 */
+	private $settings;
+
 	public function __construct( array $values = [] ) {
 
 		// todo: create protected values property
@@ -50,12 +55,23 @@ abstract class Column {
 	 */
 	public abstract function create_view( ColumnId $id );
 
-	/**
-	 * Get settings that depend on this setting
-	 * @return Column[]
-	 */
 	public function get_dependent_settings() {
-		return [];
+		return $this->settings;
+	}
+
+	protected function set_dependent_setting( Column $setting ) {
+		$this->settings[ $setting->get_name() ] = $setting;
+
+		return $this;
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return Column
+	 */
+	public function get_dependent_setting( $name ) {
+		return $this->settings[ $name ];
 	}
 
 	private function set_options() {
@@ -248,12 +264,13 @@ abstract class Column {
 	/**
 	 * Add an element to this setting
 	 *
+	 * @param ColumnId    $id
 	 * @param string      $type
 	 * @param string|null $name
 	 *
 	 * @return Element\Select|Element\Input|Element\Radio
 	 */
-	protected function create_element( $column_name, $type, $name = null ) {
+	protected function create_element( ColumnId $id, $type, $name = null ) {
 		if ( null === $name ) {
 			$name = $this->get_default_option();
 		}
@@ -277,8 +294,8 @@ abstract class Column {
 				$element->set_type( $type );
 		}
 
-		$element->set_name( sprintf( 'columns[%s][%s]', $column_name, $name ) );
-		$element->set_id( sprintf( 'ac-%s-%s', $column_name, $name ) );
+		$element->set_name( sprintf( 'columns[%s][%s]', $id->get_value(), $name ) );
+		$element->set_id( sprintf( 'ac-%s-%s', $id->get_value(), $name ) );
 		$element->add_class( 'ac-setting-input_' . $name );
 
 		// try to set current value
@@ -362,17 +379,6 @@ abstract class Column {
 
 		return $view->render();
 	}
-
-	// todo: remove. use render.
-	//	public function __toString() {
-	//		$rendered = $this->render();
-	//
-	//		if ( ! is_string( $rendered ) ) {
-	//			return '';
-	//		}
-	//
-	//		return $rendered;
-	//	}
 
 	public function get_column() {
 		return $this->column;

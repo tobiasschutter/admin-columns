@@ -36,8 +36,6 @@ class ListScreenFactory {
 				return new Post( $args['subtype'], $post_type->labels->singular_name, $columns, $settings, $id );
 		}
 
-		// todo: add hook for more list screen
-
 		return null;
 	}
 

@@ -2,12 +2,14 @@
 
 namespace AC\Controller;
 
+use AC\ColumnFactory\Post;
 use AC\ListScreen;
 use AC\ListScreenFactory;
 use AC\ListScreenRepository\Storage;
 use AC\ListScreenTypes;
 use AC\Preferences;
 use AC\Request;
+use AC\Settings\Column\Images;
 use AC\Type\ColumnId;
 use AC\Type\ListScreenId;
 
@@ -69,6 +71,28 @@ class ListScreenRequest {
 	 * @return ListScreen
 	 */
 	public function get_list_screen() {
+
+		// todo test
+		$factory = new Post();
+		$column = $factory->create( 'column-images', ColumnId::generate(), [
+			'width'           => '202',
+			'width_unit'      => 'px',
+			'label'           => 'Images Test',
+			'number_of_items' => 2,
+			'image_size'      => 'cpac-custom',
+			'image_size_w'    => 34,
+			'image_size_h'    => 50,
+		] );
+
+		/** @var Images $images */
+		$images = $column->get_setting( 'images' );
+		$value = $images->format( [ 3152, 3153, 3155, 3156 ], '' );
+
+		echo '<pre>'; print_r( $value ); echo '</pre>'; exit;
+
+
+		echo '<pre>'; print_r( $column ); echo '</pre>'; exit;
+		
 		$id = new ListScreenId( '5e738d0e36e2d' );
 
 		$list_screen = $this->storage->find( $id );

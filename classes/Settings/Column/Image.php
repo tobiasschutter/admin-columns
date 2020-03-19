@@ -3,6 +3,7 @@
 namespace AC\Settings\Column;
 
 use AC\Settings;
+use AC\Type\ColumnId;
 use AC\View;
 
 class Image extends Settings\Column
@@ -35,20 +36,20 @@ class Image extends Settings\Column
 		];
 	}
 
-	public function create_view() {
+	public function create_view( ColumnId $id ) {
 		$width = new View( [
-			'setting' => $this->create_element( 'number', 'image_size_w' ),
+			'setting' => $this->create_element( $id, 'number', 'image_size_w' ),
 			'label'   => __( 'Width', 'codepress-admin-columns' ),
 			'tooltip' => __( 'Width in pixels', 'codepress-admin-columns' ),
 		] );
 
 		$height = new View( [
-			'setting' => $this->create_element( 'number', 'image_size_h' ),
+			'setting' => $this->create_element( $id, 'number', 'image_size_h' ),
 			'label'   => __( 'Height', 'codepress-admin-columns' ),
 			'tooltip' => __( 'Height in pixels', 'codepress-admin-columns' ),
 		] );
 
-		$size = $this->create_element( 'select', 'image_size' )
+		$size = $this->create_element( $id, 'select', 'image_size' )
 		             ->set_options( $this->get_grouped_image_sizes() );
 
 		$view = new View( [
