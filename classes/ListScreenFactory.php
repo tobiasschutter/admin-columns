@@ -10,16 +10,6 @@ use RuntimeException;
 
 class ListScreenFactory {
 
-	/**
-	 * @var ColumnFactory
-	 */
-	private $column_factory;
-
-	public function __construct() {
-		// todo: ColumnFactory per ListScreenType
-		$this->column_factory = new ColumnFactory();
-	}
-
 	public function create( ListScreenType $type, array $args = [] ) {
 
 		switch ( $type->get_value() ) {
@@ -36,7 +26,7 @@ class ListScreenFactory {
 					: null;
 
 				$columns = isset( $args['columns'] )
-					? $this->get_columns( $args['columns'] )
+					? $this->get_columns( new ColumnFactory\Post(), $args['columns'] )
 					: new ColumnCollection();
 
 				$settings = isset( $args['settings'] )
@@ -45,6 +35,8 @@ class ListScreenFactory {
 
 				return new Post( $args['subtype'], $post_type->labels->singular_name, $columns, $settings, $id );
 		}
+
+		// todo: add hook for more list screen
 
 		return null;
 	}
@@ -60,11 +52,12 @@ class ListScreenFactory {
 	}
 
 	/**
-	 * @param array $columns_data
+	 * @param ColumnFactory $factory
+	 * @param array         $columns_data
 	 *
 	 * @return ColumnCollection
 	 */
-	private function get_columns( array $columns_data = [] ) {
+	protected function get_columns( ColumnFactory $factory, array $columns_data = [] ) {
 		$columns = new ColumnCollection();
 
 		foreach ( $columns_data as $id => $column_data ) {
@@ -72,7 +65,7 @@ class ListScreenFactory {
 
 			unset( $column_data['type'] );
 
-			$column = $this->column_factory->create( $type, new ColumnId( $id ), $column_data );
+			$column = $factory->create( $type, new ColumnId( $id ), $column_data );
 
 			if ( ! $column ) {
 				continue;

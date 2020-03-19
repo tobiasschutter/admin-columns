@@ -30,6 +30,8 @@ class Column {
 		$this->name = $name;
 		$this->label = $label;
 		$this->id = $id;
+
+		// todo
 		$this->settings[] = new Settings\Column\Width( $settings );
 		$this->settings[] = new Settings\Column\Label( $this->label, $settings );
 	}
