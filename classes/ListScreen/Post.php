@@ -6,6 +6,7 @@ use AC\ColumnCollection;
 use AC\ListScreen;
 use AC\MetaType;
 use AC\Type\ListScreenId;
+use AC\Type\ListScreenTableId;
 use AC\Type\ListScreenType;
 use WP_Screen;
 
@@ -19,7 +20,7 @@ class Post extends ListScreen {
 	private $post_type;
 
 	public function __construct( $post_type, $label, ColumnCollection $columns = null, array $settings = [], ListScreenId $id = null ) {
-		parent::__construct( new ListScreenType( self::TYPE ), new MetaType( 'post' ), $label, $columns, $settings, $id );
+		parent::__construct( new ListScreenType( self::TYPE ), new MetaType( 'post' ), new ListScreenTableId( 'edit', 'edit-' . $post_type ), $label, $columns, $settings, $id );
 
 		$this->post_type = $post_type;
 	}
@@ -28,11 +29,7 @@ class Post extends ListScreen {
 		return 'edit' === $wp_screen->base && 'edit-' . $this->post_type === $wp_screen->id;
 	}
 
-	public function get_url( $is_network = false ) {
-		$url = $is_network
-			? network_admin_url( 'edit.php' )
-			: admin_url( 'edit.php' );
-
-		return add_query_arg( [ 'post_type' => $this->post_type ], $url );
+	public function get_url() {
+		return add_query_arg( [ 'post_type' => $this->post_type ], admin_url( 'edit.php' ) );
 	}
 }

@@ -4,6 +4,7 @@ namespace AC;
 
 use AC\Type\ColumnId;
 use AC\Type\ListScreenId;
+use AC\Type\ListScreenTableId;
 use AC\Type\ListScreenType;
 use WP_Screen;
 
@@ -17,12 +18,18 @@ abstract class ListScreen {
 	/**
 	 * @var ListScreenType
 	 */
+	// todo: remove in favor of table_id?
 	private $type;
 
 	/**
 	 * @var MetaType
 	 */
 	private $meta_type;
+
+	/**
+	 * @var ListScreenTableId
+	 */
+	private $table_id;
 
 	/**
 	 * @var string
@@ -39,13 +46,22 @@ abstract class ListScreen {
 	 */
 	private $settings;
 
-	public function __construct( ListScreenType $type, MetaType $meta_type, $label, ColumnCollection $columns = null, array $settings = [], ListScreenId $id = null ) {
+	public function __construct(
+		ListScreenType $type,
+		MetaType $meta_type,
+		ListScreenTableId $table_id,
+		$label,
+		ColumnCollection $columns = null,
+		array $settings = [],
+		ListScreenId $id = null
+	) {
 		if ( null === $columns ) {
 			$columns = new ColumnCollection();
 		}
 
 		$this->type = $type;
 		$this->meta_type = $meta_type;
+		$this->table_id = $table_id;
 		$this->label = $label;
 		$this->columns = $columns;
 		$this->settings = $settings;
@@ -53,11 +69,9 @@ abstract class ListScreen {
 	}
 
 	/**
-	 * @param bool $is_network
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	abstract public function get_url( $is_network = false );
+	abstract public function get_url();
 
 	/**
 	 * @param WP_Screen $wp_screen
@@ -92,6 +106,13 @@ abstract class ListScreen {
 	 */
 	public function get_meta_type() {
 		return $this->meta_type;
+	}
+
+	/**
+	 * @return ListScreenTableId
+	 */
+	public function get_table_id() {
+		return $this->table_id;
 	}
 
 	/**

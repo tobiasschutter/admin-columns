@@ -3,6 +3,7 @@
 namespace AC\Admin\Section\Partial;
 
 use AC\Controller\ListScreenRequest;
+use AC\ListScreen;
 use AC\ListScreenGroups;
 use AC\ListScreenTypes;
 use AC\View;
@@ -26,8 +27,7 @@ class Menu {
 		$menu = new View( [
 			'items'       => $this->get_grouped_list_screens(),
 			'current'     => $list_screen->get_id()->get_value(),
-			// todo
-			'screen_link' => $list_screen->get_url( $this->is_network ),
+			'screen_link' => $list_screen->get_url(),
 			'class'       => $is_hidden ? 'hidden' : '',
 		] );
 
@@ -54,10 +54,12 @@ class Menu {
 			: $this->get_site_list_screens();
 
 		$list_screens_grouped = [];
+
+		/** @var ListScreen $list_screen */
 		foreach ( $list_screens as $list_screen ) {
 			// todo
-//			$list_screens_grouped[ $list_screen->get_group() ][ $list_screen->get_key() ] = $list_screen->get_label();
-			$list_screens_grouped[ 'group' ][ $list_screen->get_id()->get_value() ] = $list_screen->get_label();
+			//			$list_screens_grouped[ $list_screen->get_group() ][ $list_screen->get_key() ] = $list_screen->get_label();
+			$list_screens_grouped['post'][ $list_screen->get_table_id()->get_screen_base() . '/' . $list_screen->get_table_id()->get_screen_id() ] = $list_screen->get_label();
 		}
 
 		$grouped = [];

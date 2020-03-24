@@ -159,9 +159,9 @@ class AdminColumns extends Plugin {
 //			$list_screens[] = new ListScreen\User();
 //		}
 
-//		foreach ( $list_screens as $list_screen ) {
-//			ListScreenTypes::instance()->register_list_screen( $list_screen );
-//		}
+		foreach ( $list_screens as $list_screen ) {
+			ListScreenTypes::instance()->register_list_screen( $list_screen );
+		}
 
 		do_action( 'ac/list_screens', $this );
 	}

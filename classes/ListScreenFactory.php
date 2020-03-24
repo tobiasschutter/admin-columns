@@ -29,15 +29,26 @@ class ListScreenFactory {
 					? new ListScreenId( $args['id'] )
 					: null;
 
+				// todo; what to do with Product columns?
+				$column_factory = isset( $args['column_factory'] )
+					? $args['column_factory']
+					: new ColumnFactory\Post();
+
 				$columns = isset( $args['columns'] )
-					? $this->get_columns( new ColumnFactory\Post(), $args['columns'] )
+					? $this->get_columns( $column_factory, $args['columns'] )
 					: new ColumnCollection();
 
 				$settings = isset( $args['settings'] )
 					? $args['settings']
 					: [];
 
-				return new Post( $args['post_type'], $post_type->labels->singular_name, $columns, $settings, $id );
+				return new Post(
+					$args['post_type'],
+					$post_type->labels->singular_name,
+					$columns,
+					$settings,
+					$id
+				);
 		}
 
 		return null;
