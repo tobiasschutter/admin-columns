@@ -19,6 +19,10 @@
  * ----------------------------------------------------------------------------
  */
 .ac-column {
+	span.select2-container {
+		z-index: 1;
+	}
+
 	.comment-grey-bubble {
 		height: 16px;
 		width: 16px;
@@ -55,7 +59,7 @@
  */
 .ac-admin {
 	margin-right: 300px;
-	max-width: 740px;
+	max-width: 900px;
 
 	#add-new-column-template {
 		display: none;
@@ -395,14 +399,16 @@
 		overflow: visible;
 		background: $bg-gray;
 		border-right: 1px solid $border-gray-dark;
-		width: 34%;
+		width: 30%;
 		padding: 10px;
 		padding-left: 12px;
 
 		.ac-pointer {
 			position: absolute;
-			right: 8px;
-			top: 14px;
+			right: 4px;
+			top: 10px;
+			padding: 4px;
+			height: 17px;
 		}
 
 		a.more-link {
@@ -423,7 +429,7 @@
 
 		span.label {
 			font-weight: bold;
-			display: block;
+			display: inline-block;
 			color: #333333;
 			font-style: normal;
 		}
@@ -696,6 +702,10 @@
 		}
 	}
 
+	td.col-input {
+		background: #f5f5f5;
+	}
+
 	.radio-labels {
 		display: inline-block;
 
@@ -860,6 +870,11 @@ div.ac-column-header {
 
 									&.on, &.on span {
 										color: $blue;
+									}
+
+									&.cpacicon {
+										font-size: 14px;
+										line-height: 18px;
 									}
 								}
 

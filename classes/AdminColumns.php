@@ -24,7 +24,7 @@ class AdminColumns extends Plugin {
 	private $admin;
 
 	/**
-	 * @var ListScreenRepository\Storage
+	 * @var Storage
 	 */
 	private $storage;
 
@@ -34,9 +34,6 @@ class AdminColumns extends Plugin {
 	 */
 	private static $instance;
 
-	/**
-	 * @since 2.5
-	 */
 	public static function instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self;
@@ -45,9 +42,6 @@ class AdminColumns extends Plugin {
 		return self::$instance;
 	}
 
-	/**
-	 * @since 1.0
-	 */
 	private function __construct() {
 		$this->storage = new Storage();
 		$this->storage->set_repositories( [
@@ -62,12 +56,13 @@ class AdminColumns extends Plugin {
 			$this->get_dir()
 		);
 
-		$this->admin = ( new AdminFactory( $this->storage, $location, $this->is_network_active() ) )->create();
+		$this->admin = ( new AdminFactory( $this->storage, $location ) )->create();
 
 		$services = [
 			$this->admin,
 			new Ajax\NumberFormat( new Request() ),
 			new Deprecated\Hooks,
+			new ListScreens(),
 			new Screen,
 			new Settings\General,
 			new ThirdParty\ACF,
@@ -77,13 +72,13 @@ class AdminColumns extends Plugin {
 			new Controller\DefaultColumns( new Request(), new DefaultColumnsRepository() ),
 			new QuickEdit( $this->storage, new Table\Preference() ),
 			new Capabilities\Manage(),
-			new Controller\AjaxColumnRequest( $this->storage ),
+			new Controller\AjaxColumnRequest( $this->storage, new Request() ),
 			new Controller\AjaxRequestCustomFieldKeys(),
 			new Controller\AjaxColumnValue( $this->storage ),
 			new Controller\ListScreenRestoreColumns( $this->storage ),
 			new Controller\RedirectAddonStatus( ac_get_admin_url( Page\Addons::NAME ), new Integrations() ),
 			new Controller\RestoreSettingsRequest( $this->storage->get_repository( 'acp-database' ) ),
-			new PluginActionLinks( $this->get_basename(), ac_get_admin_url( Page\Columns::NAME ) ),
+			new PluginActionLinks( $this->get_basename() ),
 			new NoticeChecks(),
 			new TableLoader( $this->storage, new PermissionChecker(), $location, new Table\Preference() ),
 		];
@@ -96,13 +91,12 @@ class AdminColumns extends Plugin {
 
 		$this->localize();
 
-		add_action( 'init', [ $this, 'register_list_screens' ], 1000 ); // run after all post types are registered
 		add_action( 'init', [ $this, 'install' ], 1000 );
 		add_action( 'init', [ $this, 'register_global_scripts' ] );
 	}
 
 	/**
-	 * @return ListScreenRepository\Storage
+	 * @return Storage
 	 */
 	public function get_storage() {
 		return $this->storage;
@@ -126,14 +120,11 @@ class AdminColumns extends Plugin {
 		return AC_VERSION;
 	}
 
-	/**
-	 * @return Admin Settings class instance
-	 * @since 2.2
-	 */
 	public function admin() {
 		return $this->admin;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * @param ListScreen $list_screen
 	 *
@@ -166,6 +157,8 @@ class AdminColumns extends Plugin {
 		do_action( 'ac/list_screens', $this );
 	}
 
+=======
+>>>>>>> develop
 	private function get_location() {
 		return new Absolute( $this->get_url(), $this->get_dir() );
 	}
@@ -183,36 +176,6 @@ class AdminColumns extends Plugin {
 		}
 	}
 
-	/**
-	 * Get a list of post types for which Admin Columns is active
-	 * @return array List of post type keys (e.g. post, page)
-	 * @since 1.0
-	 */
-	public function get_post_types() {
-		$post_types = get_post_types( [
-			'_builtin' => false,
-			'show_ui'  => true,
-		] );
-
-		foreach ( [ 'post', 'page' ] as $builtin ) {
-			if ( post_type_exists( $builtin ) ) {
-				$post_types[ $builtin ] = $builtin;
-			}
-		}
-
-		/**
-		 * Filter the post types for which Admin Columns is active
-		 *
-		 * @param array $post_types List of active post type names
-		 *
-		 * @since 2.0
-		 */
-		return apply_filters( 'ac/post_types', $post_types );
-	}
-
-	/**
-	 * Load text-domain
-	 */
 	public function localize() {
 		$relative_dir = str_replace( WP_PLUGIN_DIR, '', $this->get_dir() );
 
@@ -230,7 +193,6 @@ class AdminColumns extends Plugin {
 	}
 
 	/**
-	 * Returns the default list screen when no choice is made by the user
 	 * @deprecated 3.1.5
 	 * @since      3.0
 	 */
@@ -249,7 +211,7 @@ class AdminColumns extends Plugin {
 	/**
 	 * @param string $key
 	 *
-	 * @return ListScreen|false
+	 * @return ListScreen|null
 	 * @since      3.0
 	 * @deprecated 3.2
 	 */
@@ -292,7 +254,6 @@ class AdminColumns extends Plugin {
 	}
 
 	/**
-	 * Contains simple helper methods
 	 * @return Helper
 	 * @deprecated 3.2
 	 * @since      3.0
@@ -300,7 +261,7 @@ class AdminColumns extends Plugin {
 	public function helper() {
 		_deprecated_function( __METHOD__, '3.2', 'ac_helper()' );
 
-		return ac_helper();
+		return new Helper();
 	}
 
 	/**
@@ -343,17 +304,42 @@ class AdminColumns extends Plugin {
 	public function use_delete_confirmation() {
 		_deprecated_function( __METHOD__, '4.1' );
 
-		return apply_filters( 'ac/delete_confirmation', true );
+		return (bool) apply_filters( 'ac/delete_confirmation', true );
 	}
 
 	/**
-	 * @return bool True when doing ajax
+	 * @return bool
 	 * @deprecated 4.1
 	 */
 	public function is_doing_ajax() {
 		_deprecated_function( __METHOD__, '4.1', 'wp_doing_ajax()' );
 
 		return wp_doing_ajax();
+	}
+
+	/**
+	 * @return array
+	 * @since      1.0
+	 * @deprecated 4.1
+	 */
+	public function get_post_types() {
+		_deprecated_function( __METHOD__, '4.1' );
+
+		return ( new ListScreens )->get_post_types();
+	}
+
+	/**
+	 * @param ListScreen $list_screen
+	 *
+	 * @return self
+	 * @deprecated 4.1
+	 */
+	public function register_list_screen( ListScreen $list_screen ) {
+		_deprecated_function( __METHOD__, '4.1', 'ListScreenTypes::register_list_screen()' );
+
+		ListScreenTypes::instance()->register_list_screen( $list_screen );
+
+		return $this;
 	}
 
 }

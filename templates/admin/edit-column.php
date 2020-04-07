@@ -46,7 +46,7 @@ $column = $this->column;
 								?>
 							</div>
 							<a class="toggle" data-toggle="column">
-								<?php echo $column->get_setting( 'label' )->get_value(); // do not escape ?>
+								<?= $column->get_setting( 'label' )->get_value(); // do not escape ?>
 							</a>
 							<a class="edit-button" data-toggle="column"><?php _e( 'Edit', 'codepress-admin-columns' ); ?></a>
 							<a class="close-button" data-toggle="column"><?php _e( 'Close', 'codepress-admin-columns' ); ?></a>
@@ -58,7 +58,7 @@ $column = $this->column;
 					</td>
 					<td class="column_type">
 						<div class="inner" data-toggle="column">
-							<?php echo ac_helper()->html->strip_attributes( $column->get_label(), array( 'style', 'class' ) ); ?>
+							<?= ac_helper()->html->strip_attributes( $column->get_label(), array( 'style', 'class' ) ); ?>
 						</div>
 					</td>
 					<td class="column_edit" data-toggle="column">

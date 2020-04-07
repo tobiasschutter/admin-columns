@@ -44,17 +44,11 @@ class Columns extends Page implements Enqueueables, Helpable {
 	 */
 	private $menu;
 
-	/**
-	 * @var bool
-	 */
-	private $network_active;
-
 	public function __construct(
 		ListScreenRequest $controller,
 		Location\Absolute $location,
 		DefaultColumnsRepository $default_columns,
-		Menu $menu,
-		$network_active
+		Menu $menu
 	) {
 		parent::__construct( self::NAME, __( 'Admin Columns', 'codepress-admin-columns' ) );
 
@@ -62,7 +56,6 @@ class Columns extends Page implements Enqueueables, Helpable {
 		$this->location = $location;
 		$this->default_columns = $default_columns;
 		$this->menu = $menu;
-		$this->network_active = $network_active;
 	}
 
 	public function show_read_only_notice( ListScreen $list_screen ) {
@@ -78,6 +71,7 @@ class Columns extends Page implements Enqueueables, Helpable {
 	}
 
 	public function get_assets() {
+
 		return new Assets( [
 			new Style( 'jquery-ui-lightness', $this->location->with_suffix( 'assets/ui-theme/jquery-ui-1.8.18.custom.css' ) ),
 			new Script( 'jquery-ui-slider' ),
@@ -85,7 +79,6 @@ class Columns extends Page implements Enqueueables, Helpable {
 				'ac-admin-page-columns',
 				$this->location->with_suffix( 'assets/js/admin-page-columns.js' ),
 				$this->default_columns,
-				$this->network_active,
 				$this->controller->get_list_screen()
 			),
 			new Style( 'ac-admin-page-columns-css', $this->location->with_suffix( 'assets/css/admin-page-columns.css' ) ),
@@ -143,8 +136,13 @@ class Columns extends Page implements Enqueueables, Helpable {
 
 						$delete_confirmation_message = false;
 
+<<<<<<< HEAD
 						if ( apply_filters( 'ac/delete_confirmation', true ) ) {
 							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_label() . "'" );
+=======
+						if ( (bool) apply_filters( 'ac/delete_confirmation', true ) ) {
+							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_title() . "'" );
+>>>>>>> develop
 						}
 
 						$actions = new View( [

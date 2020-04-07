@@ -12,26 +12,20 @@ use AC\ListScreenTypes;
 class Columns extends Script {
 
 	/**
-	 * @var ListScreen
-	 */
-	private $list_screen;
-
-	/**
 	 * @var DefaultColumnsRepository
 	 */
 	private $default_columns;
 
 	/**
-	 * @var bool
+	 * @var ListScreen
 	 */
-	private $network_active;
+	private $list_screen;
 
 	public function __construct(
 		$handle,
 		Location $location,
 		DefaultColumnsRepository $default_columns,
-		$network_active = false,
-		ListScreen $list_screen = null
+		ListScreen $list_screen
 	) {
 		parent::__construct( $handle, $location, [
 			'jquery',
@@ -41,13 +35,12 @@ class Columns extends Script {
 			'wp-pointer',
 		] );
 
-		$this->list_screen = $list_screen;
 		$this->default_columns = $default_columns;
-		$this->network_active = (bool) $network_active;
+		$this->list_screen = $list_screen;
 	}
 
 	private function get_list_screens() {
-		return $this->network_active
+		return is_network_admin()
 			? ListScreenTypes::instance()->get_list_screens( [ 'network_only' => true ] )
 			: ListScreenTypes::instance()->get_list_screens( [ 'site_only' => true ] );
 	}

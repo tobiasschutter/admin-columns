@@ -23,15 +23,9 @@ class AdminFactory {
 	 */
 	protected $location;
 
-	/**
-	 * @var bool
-	 */
-	protected $network_active;
-
-	public function __construct( Storage $storage, Location\Absolute $location, $network_active ) {
+	public function __construct( Storage $storage, Location\Absolute $location ) {
 		$this->storage = $storage;
 		$this->location = $location;
-		$this->network_active = (bool) $network_active;
 	}
 
 	/**
@@ -48,14 +42,13 @@ class AdminFactory {
 			$list_screen_controller,
 			$this->location,
 			new DefaultColumnsRepository(),
-			new Section\Partial\Menu( $list_screen_controller, false ),
-			$this->network_active
+			new Section\Partial\Menu( $list_screen_controller, false )
 		);
 	}
 
 	protected function create_section_general() {
 		return new Section\General( [
-			new Section\Partial\ShowEditButton( new Settings\General() ),
+			new Section\Partial\ShowEditButton(),
 		] );
 	}
 

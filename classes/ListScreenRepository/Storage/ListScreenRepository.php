@@ -133,7 +133,7 @@ class ListScreenRepository implements AC\ListScreenRepositoryWritable, SourceAwa
 	/**
 	 * @inheritDoc
 	 */
-	public function get_source( $id ) {
+	public function get_source( ListScreenId $id ) {
 		if ( ! $this->has_source( $id ) ) {
 			throw new Exception\SourceNotAvailableException();
 		}
@@ -144,7 +144,7 @@ class ListScreenRepository implements AC\ListScreenRepositoryWritable, SourceAwa
 	/**
 	 * @inheritDoc
 	 */
-	public function has_source( $id ) {
+	public function has_source( ListScreenId $id ) {
 		return $this->repository instanceof SourceAware && $this->repository->has_source( $id );
 	}
 
