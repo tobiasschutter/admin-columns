@@ -124,41 +124,6 @@ class AdminColumns extends Plugin {
 		return $this->admin;
 	}
 
-<<<<<<< HEAD
-	/**
-	 * @param ListScreen $list_screen
-	 *
-	 * @return self
-	 */
-	public function register_list_screen( ListScreen $list_screen ) {
-		ListScreenTypes::instance()->register_list_screen( $list_screen );
-
-		return $this;
-	}
-
-	public function register_list_screens() {
-		$list_screens = [];
-
-		foreach ( $this->get_post_types() as $post_type ) {
-			$list_screens[] = new ListScreen\Post( $post_type, $post_type );
-		}
-
-//		$list_screens[] = new ListScreen\Media();
-//		$list_screens[] = new ListScreen\Comment();
-//
-//		if ( ! is_multisite() ) {
-//			$list_screens[] = new ListScreen\User();
-//		}
-
-		foreach ( $list_screens as $list_screen ) {
-			ListScreenTypes::instance()->register_list_screen( $list_screen );
-		}
-
-		do_action( 'ac/list_screens', $this );
-	}
-
-=======
->>>>>>> develop
 	private function get_location() {
 		return new Absolute( $this->get_url(), $this->get_dir() );
 	}

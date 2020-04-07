@@ -136,13 +136,8 @@ class Columns extends Page implements Enqueueables, Helpable {
 
 						$delete_confirmation_message = false;
 
-<<<<<<< HEAD
-						if ( apply_filters( 'ac/delete_confirmation', true ) ) {
-							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_label() . "'" );
-=======
 						if ( (bool) apply_filters( 'ac/delete_confirmation', true ) ) {
-							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_title() . "'" );
->>>>>>> develop
+							$delete_confirmation_message = sprintf( __( "Warning! The %s columns data will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'codepress-admin-columns' ), "'" . $list_screen->get_label() . "'" );
 						}
 
 						$actions = new View( [
@@ -253,6 +248,8 @@ class Columns extends Page implements Enqueueables, Helpable {
 	 * @return string
 	 */
 	private function render_column_template( ListScreen $list_screen ) {
+
+		// todo
 		$column = $this->get_column_template_by_group( $list_screen->get_column_types(), 'custom' );
 
 		if ( ! $column ) {
