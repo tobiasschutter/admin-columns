@@ -3,6 +3,8 @@
 namespace AC\Autoloader;
 
 use Exception;
+use LogicException;
+use RuntimeException;
 
 class Underscore {
 
@@ -42,11 +44,11 @@ class Underscore {
 	 */
 	public function add_alias( $original, $alias ) {
 		if ( strpos( $original, '/' ) ) {
-			throw new Exception( 'Namespaces use \ instead of /.' );
+			throw new LogicException( 'Namespaces use \ instead of /.' );
 		}
 
 		if ( ! $this->register_alias( $original, $alias ) ) {
-			throw new Exception( sprintf( 'Failed to register alias for %s', $original ) );
+			throw new RuntimeException( sprintf( 'Failed to register alias for %s', $original ) );
 		}
 
 		$this->aliases[ $alias ] = $original;

@@ -13,10 +13,17 @@ class Autoloader {
 	protected static $instance;
 
 	/**
-	 * Register prefixes and their path
+	 * Prefixes and their path
+	 *
 	 * @var string[]
 	 */
 	protected $prefixes;
+
+	/**
+	 *
+	 * @var array
+	 */
+	protected $map = [];
 
 	protected function __construct() {
 		$this->prefixes = [];
@@ -50,6 +57,13 @@ class Autoloader {
 	}
 
 	/**
+	 * @param array $map
+	 */
+	public function register_map( array $map ) {
+		$this->map = array_merge( $map, $this->map );
+	}
+
+	/**
 	 * @param $class
 	 *
 	 * @return false|string
@@ -80,18 +94,18 @@ class Autoloader {
 	/**
 	 * Get the path from a given namespace that has a registered prefix
 	 *
-	 * @param string $namespace
+	 * @param string $class
 	 *
 	 * @return false|string
 	 */
-	protected function get_path_from_namespace( $namespace ) {
-		$prefix = $this->get_prefix( $namespace );
+	protected function get_path_from_namespace( $class ) {
+		$prefix = $this->get_prefix( $class );
 
 		if ( ! $prefix ) {
 			return false;
 		}
 
-		$path = $this->get_path( $prefix ) . substr( $namespace, strlen( $prefix ) );
+		$path = $this->get_path( $prefix ) . substr( $class, strlen( $prefix ) );
 		$path = str_replace( '\\', '/', $path );
 
 		return $path;
@@ -103,8 +117,14 @@ class Autoloader {
 	 * @return bool
 	 */
 	public function autoload( $class ) {
-		$path = $this->get_path_from_namespace( $class );
-		$file = realpath( $path . '.php' );
+		// TODO David Should be a 100% hit for our shipped code, do we need manual PSR-4?
+		if ( isset( $this->map[ $class ] ) ) {
+			$path = $this->map[ $class ];
+		} else {
+			$path = $this->get_path_from_namespace( $class ) . '.php';
+		}
+
+		$file = realpath( $path );
 
 		if ( ! $file ) {
 			return false;
@@ -113,6 +133,18 @@ class Autoloader {
 		require_once $file;
 
 		return true;
+	}
+
+	public function get_class_names_from_namespace( $namespace ) {
+		$classes = [];
+
+		foreach ( $this->map as $class => $path ) {
+			if ( 0 === strpos( $class, $namespace ) ) {
+				$classes[] = $class;
+			}
+		}
+
+		return $classes;
 	}
 
 	/**

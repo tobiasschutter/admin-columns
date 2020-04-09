@@ -657,8 +657,10 @@ abstract class ListScreen {
 	 *
 	 * @throws ReflectionException
 	 */
+
+	// TODO David Test new from_namespace idea
 	public function register_column_types_from_dir( $namespace ) {
-		$classes = Autoloader::instance()->get_class_names_from_dir( $namespace );
+		$classes = Autoloader::instance()->get_class_names_from_namespace( $namespace );
 
 		foreach ( $classes as $class ) {
 			$reflection = new ReflectionClass( $class );

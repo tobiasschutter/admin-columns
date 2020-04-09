@@ -40,6 +40,8 @@ define( 'AC_VERSION', '4.1.0' );
 
 require_once __DIR__ . '/classes/Dependencies.php';
 
+$map = require __DIR__ . '/config/autoload-classmap.php';
+
 add_action( 'after_setup_theme', function () {
 	$dependencies = new AC\Dependencies( plugin_basename( AC_FILE ), AC_VERSION );
 	$dependencies->requires_php( '5.6.20' );
@@ -51,7 +53,11 @@ add_action( 'after_setup_theme', function () {
 	require_once __DIR__ . '/api.php';
 	require_once __DIR__ . '/classes/Autoloader.php';
 
-	AC\Autoloader::instance()->register_prefix( 'AC', __DIR__ . '/classes' );
+	//AC\Autoloader::instance()->register_prefix( 'AC', __DIR__ . '/classes' );
+
+	// TODO David test this
+	AC\Autoloader::instance()->register_map( require __DIR__ . '/config/autoload-classmap.php' );
+
 	AC\Autoloader\Underscore::instance()
 	                        ->add_alias( 'AC\ListScreen', 'AC_ListScreen' )
 	                        ->add_alias( 'AC\Settings\FormatValue', 'AC_Settings_FormatValueInterface' )
