@@ -13,6 +13,7 @@ use LogicException;
 
 final class Database implements ListScreenRepositoryWritable {
 
+	// TODO David this is a bit too general, maybe acp or ac_list_screens any future table will have a naming issue now
 	const TABLE = 'admin_columns';
 
 	/**
@@ -77,6 +78,7 @@ final class Database implements ListScreenRepositoryWritable {
 	 *
 	 * @return object|null
 	 */
+	// TODO David rename this method to something more like query or rows or...
 	private function find_from_database( ListScreenId $id ) {
 		global $wpdb;
 
@@ -89,6 +91,7 @@ final class Database implements ListScreenRepositoryWritable {
 
 		$data = $wpdb->get_row( $wpdb->prepare( $sql, $id->get_id() ) );
 
+		// TODO David this could trigger an warning (foreeach on null?)
 		if ( ! isset( $data->list_id ) ) {
 			return null;
 		}
