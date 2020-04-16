@@ -27,11 +27,6 @@ abstract class ListScreen {
 	private $meta_type;
 
 	/**
-	 * @var ListScreenTableId
-	 */
-	private $table_id;
-
-	/**
 	 * @var string
 	 */
 	private $label;
@@ -49,7 +44,6 @@ abstract class ListScreen {
 	public function __construct(
 		ListScreenType $type,
 		MetaType $meta_type,
-		ListScreenTableId $table_id,
 		$label,
 		ColumnCollection $columns = null,
 		array $settings = [],
@@ -72,13 +66,6 @@ abstract class ListScreen {
 	 * @return string
 	 */
 	abstract public function get_url();
-
-	/**
-	 * @param WP_Screen $wp_screen
-	 *
-	 * @return bool
-	 */
-	abstract public function is_valid( WP_Screen $wp_screen );
 
 	/**
 	 * @return ListScreenType

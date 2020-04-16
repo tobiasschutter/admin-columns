@@ -39,11 +39,12 @@ class Columns extends Script {
 		$this->list_screen = $list_screen;
 	}
 
-	private function get_list_screens() {
-		return is_network_admin()
-			? ListScreenTypes::instance()->get_list_screens( [ 'network_only' => true ] )
-			: ListScreenTypes::instance()->get_list_screens( [ 'site_only' => true ] );
-	}
+	// todo
+//	private function get_list_screens() {
+//		return is_network_admin()
+//			? ListScreenTypes::instance()->get_list_screens( [ 'network_only' => true ] )
+//			: ListScreenTypes::instance()->get_list_screens( [ 'site_only' => true ] );
+//	}
 
 	public function register() {
 		parent::register();
@@ -69,17 +70,18 @@ class Columns extends Script {
 			],
 		];
 
-		foreach ( $this->get_list_screens() as $list_screen ) {
-			if ( $this->default_columns->exists( $list_screen ) ) {
-				continue;
-			}
-
-			$params['uninitialized_list_screens'][] = [
-				// todo
-				'screen_link' => add_query_arg( [ 'save-default-headings' => '1', 'list_screen' => $list_screen->get_id()->get_value() ], $list_screen->get_screen_link() ),
-				'label'       => $list_screen->get_label(),
-			];
-		}
+		// todo
+//		foreach ( $this->get_list_screens() as $list_screen ) {
+//			if ( $this->default_columns->exists( $list_screen ) ) {
+//				continue;
+//			}
+//
+//			$params['uninitialized_list_screens'][] = [
+//				// todo
+//				'screen_link' => add_query_arg( [ 'save-default-headings' => '1', 'list_screen' => $list_screen->get_id()->get_value() ], $list_screen->get_screen_link() ),
+//				'label'       => $list_screen->get_label(),
+//			];
+//		}
 
 		wp_localize_script( 'ac-admin-page-columns', 'AC', $params );
 	}

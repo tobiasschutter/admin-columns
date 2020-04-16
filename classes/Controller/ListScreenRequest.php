@@ -72,6 +72,9 @@ class ListScreenRequest {
 	 */
 	public function get_list_screen() {
 
+		// todo
+		return null;
+
 		// Requested list ID
 		$list_id = ListScreenId::is_valid_id( filter_input( INPUT_GET, 'layout_id' ) )
 			? new ListScreenId( filter_input( INPUT_GET, 'layout_id' ) )

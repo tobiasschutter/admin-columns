@@ -5,16 +5,16 @@ namespace AC;
 use AC\ListScreen\Post;
 use AC\Type\ColumnId;
 use AC\Type\ListScreenId;
-use AC\Type\ListScreenType;
+use AC\Type\ListScreenTableId;
 use RuntimeException;
 
 class ListScreenFactory {
 
-	public function create( ListScreenType $type, array $args = [] ) {
+	public function create( ListScreenTableId $id, array $args = [] ) {
 
-		switch ( $type->get_value() ) {
+		switch ( $id->get_screen_base() ) {
 
-			case Post::TYPE :
+			case 'edit' :
 				if ( ! isset( $args['post_type'] ) ) {
 					throw new RuntimeException( 'Missing post type argument.' );
 				}
@@ -59,9 +59,15 @@ class ListScreenFactory {
 
 		$args['post_type'] = $key;
 
+		// todo convert key to TableId
 		// todo: ms-users, taxonomy etc.
 
-		return $this->create( new ListScreenType( $type ), $args );
+		$table_id = new ListScreenTableId(
+			'edit',
+			'edit-' . $key
+		);
+
+		return $this->create( $table_id, $args );
 	}
 
 	/**
@@ -73,12 +79,14 @@ class ListScreenFactory {
 	protected function get_columns( ColumnFactory $factory, array $columns_data = [] ) {
 		$columns = new ColumnCollection();
 
-		foreach ( $columns_data as $id => $column_data ) {
-			$type = $column_data['type'];
+		foreach ( $columns_data as $id => $settings ) {
+			$type = $settings['type'];
 
-			unset( $column_data['type'] );
+			unset( $settings['type'] );
 
-			$column = $factory->create( $type, new ColumnId( $id ), $column_data );
+			// todo: fetch original label for native columns
+
+			$column = $factory->create( $type, new ColumnId( $id ), $settings );
 
 			if ( ! $column ) {
 				continue;

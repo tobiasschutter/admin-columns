@@ -2,6 +2,9 @@
 
 namespace AC;
 
+use AC\Type\ListScreenTableId;
+use WP_Post_Type;
+
 class ListScreens implements Registrable {
 
 	public function register() {
@@ -9,22 +12,23 @@ class ListScreens implements Registrable {
 	}
 
 	public function register_list_screens() {
-		$list_screens = [];
+		$types = ListScreenTypes::instance();
 
 		foreach ( $this->get_post_types() as $post_type ) {
-			$list_screens[] = new ListScreen\Post( $post_type );
+			$table_id = new ListScreenTableId( 'edit', 'edit-' . $post_type->name );
+			$types->add( $table_id, $post_type->label );
 		}
 
-		$list_screens[] = new ListScreen\Media();
-		$list_screens[] = new ListScreen\Comment();
-
-		if ( ! is_multisite() ) {
-			$list_screens[] = new ListScreen\User();
-		}
-
-		foreach ( $list_screens as $list_screen ) {
-			$this->register_list_screen( $list_screen );
-		}
+		//		$list_screens[] = new ListScreen\Media();
+		//		$list_screens[] = new ListScreen\Comment();
+		//
+		//		if ( ! is_multisite() ) {
+		//			$list_screens[] = new ListScreen\User();
+		//		}
+		//
+		//		foreach ( $list_screens as $list_screen ) {
+		//			$this->register_list_screen( $list_screen );
+		//		}
 
 		do_action( 'ac/list_screens', $this );
 	}
@@ -34,16 +38,14 @@ class ListScreens implements Registrable {
 	 *
 	 * @return self
 	 */
-	public function register_list_screen( ListScreen $list_screen ) {
-		ListScreenTypes::instance()->register_list_screen( $list_screen );
-
-		return $this;
-	}
+//	public function register_list_screen( ListScreen $list_screen ) {
+//		ListScreenTypes::instance()->register_list_screen( $list_screen );
+//
+//		return $this;
+//	}
 
 	/**
-	 * Get a list of post types for which Admin Columns is active
-	 * @return array List of post type keys (e.g. post, page)
-	 * @since 1.0
+	 * @return WP_Post_Type[]
 	 */
 	public function get_post_types() {
 		$post_types = get_post_types( [
@@ -51,11 +53,8 @@ class ListScreens implements Registrable {
 			'show_ui'  => true,
 		] );
 
-		foreach ( [ 'post', 'page' ] as $builtin ) {
-			if ( post_type_exists( $builtin ) ) {
-				$post_types[ $builtin ] = $builtin;
-			}
-		}
+		$post_types['page'] = 'page';
+		$post_types['post'] = 'post';
 
 		/**
 		 * Filter the post types for which Admin Columns is active
@@ -64,7 +63,19 @@ class ListScreens implements Registrable {
 		 *
 		 * @since 2.0
 		 */
-		return apply_filters( 'ac/post_types', $post_types );
+		$post_types = apply_filters( 'ac/post_types', $post_types );
+
+		$objects = [];
+
+		foreach ( $post_types as $post_type ) {
+			if ( ! post_type_exists( $post_type ) ) {
+				continue;
+			}
+
+			$objects[] = get_post_type_object( $post_type );;
+		}
+
+		return $objects;
 	}
 
 }

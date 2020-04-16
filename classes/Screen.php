@@ -2,6 +2,7 @@
 
 namespace AC;
 
+use AC\Type\ListScreenTableId;
 use WP_Screen;
 
 class Screen implements Registrable {
@@ -79,18 +80,20 @@ class Screen implements Registrable {
 		return $this->screen->post_type;
 	}
 
+	public function get_table_id() {
+		return new ListScreenTableId(
+			$this->get_base(),
+			$this->get_id()
+		);
+	}
+
 	/**
 	 * @return string|null
 	 */
 	public function get_list_screen() {
-		foreach ( ListScreenTypes::instance()->get_list_screens() as $list_screen ) {
-			if ( $list_screen->is_valid( $this->screen ) ) {
-				// todo
-				return $list_screen->get_type();
-			}
-		}
+		$factory = new ListScreenFactory();
 
-		return null;
+		return $factory->create( $this->get_table_id() );
 	}
 
 	/**

@@ -11,12 +11,11 @@ use AC\Type\ColumnId;
 
 class Post implements ColumnFactory {
 
-	public function create( $name, ColumnId $id, array $settings = [] ) {
+	public function create( $name, ColumnId $id, array $settings = [], $label = null ) {
 
 		switch ( $name ) {
 			case Author::NAME :
-				// todo: inject name
-				return new Author( 'Author', $id, $settings );
+				return new Author( $label, $id, $settings );
 
 			case AuthorName::NAME :
 				return new AuthorName( $id, $settings );
